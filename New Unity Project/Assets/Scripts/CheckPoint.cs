@@ -2,8 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Refrecter : MonoBehaviour
+public class CheckPoint : MonoBehaviour
 {
+    public Vector3 Prev { get; set; }
+    public Vector3 Next { get; set; }
+    public float path { get; set; } 
+    public float next_gap { get; set; }
+    public float prev_gap { get; set; }
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -14,11 +21,5 @@ public class Refrecter : MonoBehaviour
     void Update()
     {
         
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        collision.gameObject.transform.Rotate(transform.rotation.eulerAngles);
-        collision.gameObject.transform.GetComponent<Rigidbody>().velocity=new;
     }
 }
