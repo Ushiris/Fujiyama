@@ -24,9 +24,10 @@ public class PathFinder : MonoBehaviour
         if (other.tag == "CheckPoint")
         {
             path = other.gameObject.GetComponent<CheckPoint>();
-            player.CheckPos = path;
-            player.CpWorldPos = path.transform.position;
-            Debug.Log("hit");
+            player.CP = path;
+            player.from = path;
+            player.to = (player.looking == LR.right) ? (path.NextCP) : (path.PrevCP);
+            player.Look(player.to);
         }
     }
 }

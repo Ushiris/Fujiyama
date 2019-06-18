@@ -23,6 +23,8 @@ public class StageActivator : MonoBehaviour
             Vector3 next_pos;
             Vector3 prev_pos;
 
+            cp.path = path_length;
+
             if (i == 0)
             {
                 prev = cp;
@@ -30,6 +32,7 @@ public class StageActivator : MonoBehaviour
                 cp_pos = cp.transform.position;
                 next_pos = next.transform.position;
                 pd.StartPoint = cp;
+                cp.Prev = cp.transform;
             }
             else if (i == stages.Count - 1)
             {
@@ -37,6 +40,10 @@ public class StageActivator : MonoBehaviour
                 cp_pos = cp.transform.position;
                 next_pos = pd.EndObject.transform.position;
                 prev.next_gap = cp.path - prev.path;
+                cp.next_gap = Vector3.Distance(next_pos, cp_pos);
+                prev.Next = cp.transform;
+                cp.Prev = cp.transform;
+                cp.Next = pd.EndObject.transform;
             }
             else
             {
@@ -45,13 +52,14 @@ public class StageActivator : MonoBehaviour
                 cp_pos = cp.transform.position;
                 next_pos = next.transform.position;
                 prev.next_gap = cp.path - prev.path;
+                cp.Prev = prev.transform;
+                prev.Next = cp.transform;
             }
 
             cp.prev_gap = cp.path - prev.path;
             prev_pos = prev.transform.position;
-            cp.Prev = prev_pos - cp_pos;
-            cp.Next = next_pos - cp_pos;
-            cp.path = path_length;
+            cp.PrevAngle = prev_pos - cp_pos;
+            cp.NextAngle = next_pos - cp_pos;
             path_length += Vector3.Distance(cp_pos, next_pos);
         }
 
@@ -59,8 +67,8 @@ public class StageActivator : MonoBehaviour
 
         foreach(var a in stages)
         {
-            Debug.Log(a.GetComponentInChildren<CheckPoint>().Prev);
-            Debug.Log(a.GetComponentInChildren<CheckPoint>().Next);
+            Debug.Log(a.GetComponentInChildren<CheckPoint>().PrevAngle);
+            Debug.Log(a.GetComponentInChildren<CheckPoint>().NextAngle);
             Debug.Log(a.GetComponentInChildren<CheckPoint>().path);
         }
     }

@@ -2,85 +2,80 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//見ている向きについての情報です
+public enum LR
+{
+    right,
+    left
+}
+
 public class PlayerController : MonoBehaviour
 {
-    public CheckPoint CheckPos { get; set; }
-    public Vector3 CpWorldPos { get; set; }
+    public CheckPoint CP { get; set; }
     public float speed = 1;
     public float JumpFouce;
     public GameObject Director;
-    PathDirector pathDirector;
 
-    float path;
     float DefaultSpeed;
     bool IsGround = false;
     Rigidbody rb;
+    public LR looking;
+    float angle;
+    public CheckPoint from;
+    public CheckPoint to;
 
     // Start is called before the first frame update
     void Start()
     {
-        path = 0.1f;
+        PathDirector pathDirector;
         DefaultSpeed = speed;
         rb = gameObject.GetComponent<Rigidbody>();
         pathDirector = Director.GetComponent<PathDirector>();
-        CheckPos = pathDirector.StartPoint;
-        CpWorldPos = CheckPos.transform.position;
+        CP = pathDirector.StartPoint;
+        looking = LR.right;
+
+        from = pathDirector.StartPoint;
+        to = from.NextCP;
+        rb.position = from.transform.position;
+        Look(to);
+        //rb.position += transform.TransformDirection(Vector3.forward) * 0.1f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        //path
-        if(Input.GetKey(KeyCode.D)|| Input.GetKey(KeyCode.RightArrow))
+        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
-            if (pathDirector.path_max < path + speed * Time.deltaTime)
+            if (looking != LR.right)
             {
-                path = pathDirector.path_max - 0.1f;
+                Std.Swap<CheckPoint>(ref to, ref from);
+                looking = LR.right;
+                Look(to);
             }
-            else
-            {
-                path += speed * Time.deltaTime;
-            }
+            rb.position += transform.TransformDirection(Vector3.forward) * speed;
         }
-        else if(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+        else if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
-            if (path - speed * Time.deltaTime <= 0)
+            if (looking != LR.left)
             {
-                path = 0.1f;
+                Std.Swap<CheckPoint>(ref to, ref from);
+                looking = LR.left;
+                Look(to);
             }
-            else
-            {
-                path -= speed * Time.deltaTime;
-            }
+            rb.position += transform.TransformDirection(Vector3.forward) * speed;
         }
 
-        //jump
+        //ジャンプの処理。IsGroundは自作の変数であることに注意。
         if(Input.GetKeyDown(KeyCode.Space) && IsGround)
         {
             rb.AddForce(new Vector3(0, JumpFouce));
             speed /= 2;
         }
-
-        //move
-        Debug.Log(path);
-        if (path < CheckPos.path)
-        {
-            float par = CheckPos.prev_gap / (path-(CheckPos.path-CheckPos.prev_gap));
-            Vector3 NewPosition = new Vector3(CpWorldPos.x+ CheckPos.Prev.x*par, transform.position.y, CpWorldPos.z + CheckPos.Prev.z*par);
-            transform.rotation.Set(0, CheckPos.Prev.y, 0, transform.rotation.z);
-            transform.position = NewPosition;
-        }
-        else if (path > CheckPos.path)
-        {
-            float par = CheckPos.next_gap / (path-CheckPos.path);
-            Vector3 NewPosition = new Vector3(CpWorldPos.x + CheckPos.Next.x*par, transform.position.y, CpWorldPos.z + CheckPos.Next.z*par);
-            transform.rotation.Set(0, CheckPos.Next.y, 0, transform.rotation.z);
-            transform.position = NewPosition;
-        }
     }
-
+    
     private void OnCollisionStay(Collision collision)
     {
+        //地面に着地したということを確認します。
         if(collision.gameObject.tag=="Plane" && !IsGround)
         {
             IsGround = true;
@@ -90,9 +85,16 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionExit(Collision collision)
     {
+        //地面を離れたということを確認します。
         if (collision.gameObject.tag == "Plane")
         {
             IsGround = false;
         }
+    }
+
+    public void Look(CheckPoint to)
+    {
+        Vector3 lookPos = new Vector3(to.transform.position.x, transform.position.y, to.transform.position.z);
+        transform.LookAt(lookPos);
     }
 }
