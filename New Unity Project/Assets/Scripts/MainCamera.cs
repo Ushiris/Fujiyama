@@ -5,22 +5,18 @@ using UnityEngine;
 public class MainCamera : MonoBehaviour
 {
     public GameObject player;
-    Vector3 gap;
-    Vector3 targetPos;
     PlayerController playerController;
 
     // Start is called before the first frame update
     void Start()
     {
-        targetPos = player.transform.position;
-        gap = transform.position - targetPos;
         playerController = player.GetComponent<PlayerController>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        targetPos = player.transform.position;
+        //プレイヤーの方向と同一の方向を向き、補正をかけます。
         transform.rotation =player.transform.rotation;
         if (playerController.looking == LR.right)
         {
@@ -31,7 +27,9 @@ public class MainCamera : MonoBehaviour
         {
             transform.Rotate(new Vector3(0, 90, 0));
         }
-        transform.position = targetPos;
+
+        //プレイヤーと同一の座標へ向かい、そこから離れます。
+        transform.position = player.transform.position;
         transform.Translate(0, 0, -5, Space.Self);
     }
 }

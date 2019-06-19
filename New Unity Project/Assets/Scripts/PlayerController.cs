@@ -11,56 +11,47 @@ public enum LR
 
 public class PlayerController : MonoBehaviour
 {
-    public CheckPoint CP { get; set; }
     public float speed = 1;
     public float JumpFouce;
     public GameObject Director;
+    public LR looking;
+    public CheckPoint from;
+    public CheckPoint to;
+    public List<KeyCode> right;
+    public List<KeyCode> left;
 
     float DefaultSpeed;
     bool IsGround = false;
     Rigidbody rb;
-    public LR looking;
-    float angle;
-    public CheckPoint from;
-    public CheckPoint to;
 
     // Start is called before the first frame update
     void Start()
     {
-        PathDirector pathDirector;
         DefaultSpeed = speed;
         rb = gameObject.GetComponent<Rigidbody>();
-        pathDirector = Director.GetComponent<PathDirector>();
-        CP = pathDirector.StartPoint;
-        looking = LR.right;
-
-        from = pathDirector.StartPoint;
-        to = from.NextCP;
-        rb.position = from.transform.position;
         Look(to);
-        //rb.position += transform.TransformDirection(Vector3.forward) * 0.1f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+        if (IsInput(right))
         {
             if (looking != LR.right)
             {
                 Std.Swap<CheckPoint>(ref to, ref from);
-                looking = LR.right;
                 Look(to);
+                looking = LR.right;
             }
             rb.position += transform.TransformDirection(Vector3.forward) * speed;
         }
-        else if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+        else if (IsInput(left))
         {
             if (looking != LR.left)
             {
                 Std.Swap<CheckPoint>(ref to, ref from);
-                looking = LR.left;
                 Look(to);
+                looking = LR.left;
             }
             rb.position += transform.TransformDirection(Vector3.forward) * speed;
         }
@@ -96,5 +87,18 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 lookPos = new Vector3(to.transform.position.x, transform.position.y, to.transform.position.z);
         transform.LookAt(lookPos);
+    }
+
+    bool IsInput(List<KeyCode> keyCodes)
+    {
+        foreach(var a in keyCodes)
+        {
+            if(Input.GetKey(a))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
