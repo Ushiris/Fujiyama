@@ -12,6 +12,7 @@ public enum LR
 public class PlayerController : MonoBehaviour
 {
     public float speed = 1;
+    public float LadderSpeed = 1;
     public float JumpFouce;
     public GameObject Director;
     public LR looking;
@@ -22,7 +23,10 @@ public class PlayerController : MonoBehaviour
 
     float DefaultSpeed;
     bool IsGround = false;
+    bool IsLadder = false;
     Rigidbody rb;
+    Vector3 def_p;
+    Quaternion def_q;
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +34,8 @@ public class PlayerController : MonoBehaviour
         DefaultSpeed = speed;
         rb = gameObject.GetComponent<Rigidbody>();
         Look(to);
+        def_p = transform.position;
+        def_q = transform.rotation;
     }
 
     // Update is called once per frame
@@ -39,21 +45,37 @@ public class PlayerController : MonoBehaviour
         {
             if (looking != LR.right)
             {
-                Std.Swap<CheckPoint>(ref to, ref from);
+                Std.Swap(ref to, ref from);
                 Look(to);
                 looking = LR.right;
             }
-            rb.position += transform.TransformDirection(Vector3.forward) * speed;
+
+            if (IsLadder)
+            {
+                ForceMove(transform.TransformDirection(Vector3.up) * speed);
+            }
+            else
+            {
+                ForceMove(transform.TransformDirection(Vector3.forward) * speed);
+            }
         }
         else if (IsInput(left))
         {
             if (looking != LR.left)
             {
-                Std.Swap<CheckPoint>(ref to, ref from);
+                Std.Swap(ref to, ref from);
                 Look(to);
                 looking = LR.left;
             }
-            rb.position += transform.TransformDirection(Vector3.forward) * speed;
+
+            if (IsLadder&&!IsGround)
+            {
+                ForceMove(transform.TransformDirection(Vector3.down) * speed);
+            }
+            else
+            {
+                ForceMove(transform.TransformDirection(Vector3.forward) * speed);
+            }
         }
 
         //ジャンプの処理。IsGroundは自作の変数であることに注意。
@@ -61,6 +83,12 @@ public class PlayerController : MonoBehaviour
         {
             rb.AddForce(new Vector3(0, JumpFouce));
             speed /= 2;
+        }
+
+        //debug onry
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            transform.SetPositionAndRotation(def_p, def_q);
         }
     }
     
@@ -71,6 +99,28 @@ public class PlayerController : MonoBehaviour
         {
             IsGround = true;
             speed = DefaultSpeed;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        //はしごに足をかけているかどうかの判定
+        if (other.tag == "Ladder")
+        {
+            IsLadder = true;
+            speed = LadderSpeed;
+            rb.useGravity = false;
+        }
+        
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Ladder")
+        {
+            IsLadder = false;
+            speed = DefaultSpeed;
+            rb.useGravity = true;
         }
     }
 
@@ -100,5 +150,10 @@ public class PlayerController : MonoBehaviour
         }
 
         return false;
+    }
+
+    public void ForceMove(Vector3 add)
+    {
+        transform.position += add;
     }
 }
