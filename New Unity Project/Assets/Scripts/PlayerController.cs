@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviour
     float DefaultSpeed;
     bool IsGround = false;
     bool IsLadder = false;
+    bool IsGondra = false;
     Rigidbody rb;
     Vector3 def_p;
     Quaternion def_q;
@@ -130,6 +131,11 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.tag == "Plane")
         {
             IsGround = false;
+        }
+
+        if(collision.gameObject.tag=="gondra")
+        {
+            IsGondra = true;
         }
     }
 
