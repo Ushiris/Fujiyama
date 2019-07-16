@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PathDirector : MonoBehaviour
 {
-    public float path_max { get; set; }
     public CheckPoint StartPoint;
     public CheckPoint EndPoint;
 
