@@ -21,11 +21,12 @@ public class PlayerController : MonoBehaviour
     public List<KeyCode> right;
     public List<KeyCode> left;
 
-    float DefaultSpeed;
     bool IsGround = false;
     bool IsLadder = false;
     bool IsGondra = false;
     Rigidbody rb;
+    float DefaultSpeed;
+
     Vector3 def_p;
     Quaternion def_q;
 
@@ -80,7 +81,7 @@ public class PlayerController : MonoBehaviour
         }
 
         //ジャンプの処理。IsGroundは自作の変数であることに注意。
-        if(Input.GetKeyDown(KeyCode.Space) && IsGround)
+        if(Input.GetKeyDown(KeyCode.Space) && IsGround && !IsLadder)
         {
             rb.AddForce(new Vector3(0, JumpFouce));
             speed /= 2;
