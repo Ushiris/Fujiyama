@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-//見ている向きについての情報です
+//見ている向き
 public enum LR
 {
     right,
@@ -11,22 +11,34 @@ public enum LR
 
 public class PlayerController : MonoBehaviour
 {
+    //動作のパラメータ
     public float speed = 1;
     public float LadderSpeed = 1;
     public float JumpFouce;
-    public GameObject Director;
+    
+    //初期設定
     public LR looking;
     public CheckPoint from;
     public CheckPoint to;
+
+    //入力の設定
     public List<KeyCode> right;
     public List<KeyCode> left;
 
+    //キャラクターのステート
     bool IsGround = false;
     bool IsLadder = false;
     bool IsGondra = false;
-    Rigidbody rb;
-    float DefaultSpeed;
+    bool IsCollision = false;
 
+    //コンポーネント置き場
+    Rigidbody rb;
+
+    //変数の保存や一時的な記録
+    float DefaultSpeed;
+    LR looked = LR.right;
+
+    //debug
     Vector3 def_p;
     Quaternion def_q;
 
@@ -56,7 +68,7 @@ public class PlayerController : MonoBehaviour
             {
                 ForceMove(transform.TransformDirection(Vector3.up) * speed);
             }
-            else
+            else if(!IsCollision || looked != looking)
             {
                 ForceMove(transform.TransformDirection(Vector3.forward) * speed);
             }
@@ -74,7 +86,7 @@ public class PlayerController : MonoBehaviour
             {
                 ForceMove(transform.TransformDirection(Vector3.down) * speed);
             }
-            else
+            else if(!IsCollision|| looked!=looking)
             {
                 ForceMove(transform.TransformDirection(Vector3.forward) * speed);
             }
@@ -87,20 +99,21 @@ public class PlayerController : MonoBehaviour
             speed /= 2;
         }
 
-        //debug onry
+        //debug
         if(Input.GetKeyDown(KeyCode.R))
         {
             transform.SetPositionAndRotation(def_p, def_q);
         }
     }
-    
-    private void OnCollisionStay(Collision collision)
+
+
+    private void OnCollisionEnter(Collision collision)
     {
-        //地面に着地したということを確認します。
-        if(collision.gameObject.tag=="Plane" && !IsGround)
+        //地面以外に当たっているということの確認
+        if(collision.gameObject.tag!="Plane")
         {
-            IsGround = true;
-            speed = DefaultSpeed;
+            IsCollision = true;
+            looked = looking;
         }
     }
 
@@ -112,12 +125,14 @@ public class PlayerController : MonoBehaviour
             IsLadder = true;
             speed = LadderSpeed;
             rb.useGravity = false;
+            rb.velocity = Vector3.zero;
         }
         
     }
 
     private void OnTriggerExit(Collider other)
     {
+        //梯子を下りた時の処理
         if (other.tag == "Ladder")
         {
             IsLadder = false;
@@ -128,24 +143,27 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionExit(Collision collision)
     {
-        //地面を離れたということを確認します。
-        if (collision.gameObject.tag == "Plane")
+        //衝突の解消
+        if (collision.gameObject.tag != "Plane")
         {
-            IsGround = false;
+            IsCollision = false;
         }
 
+        //ゴンドラに乗る処理
         if(collision.gameObject.tag=="gondra")
         {
             IsGondra = true;
         }
     }
 
+    //CheckPoint用のLookAt関数。高さを無視します。
     public void Look(CheckPoint to)
     {
         Vector3 lookPos = new Vector3(to.transform.position.x, transform.position.y, to.transform.position.z);
         transform.LookAt(lookPos);
     }
 
+    //二つ以上のキー入力をif内に書くと汚いのでまとめました
     bool IsInput(List<KeyCode> keyCodes)
     {
         foreach(var a in keyCodes)
@@ -159,8 +177,18 @@ public class PlayerController : MonoBehaviour
         return false;
     }
 
+    //強制的にpositionを+addします
     public void ForceMove(Vector3 add)
     {
         transform.position += add;
+    }
+
+    public void Ground(bool tf)
+    {
+        IsGround = tf;
+        if(tf)
+        {
+            speed = DefaultSpeed;
+        }
     }
 }
