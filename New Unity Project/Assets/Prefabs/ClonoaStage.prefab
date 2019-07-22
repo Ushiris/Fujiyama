@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 4618712639559228780}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 1.983, z: 0}
-  m_LocalScale: {x: 0.01, y: 1, z: 1}
+  m_LocalScale: {x: 0.05, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4618712639652534780}
   m_RootOrder: 1
@@ -61,14 +61,6 @@ MonoBehaviour:
   Next: {fileID: 0}
   PrevCP: {fileID: 0}
   NextCP: {fileID: 0}
-  ToNext: {x: 0, y: 0, z: 0}
-  ToPrev: {x: 0, y: 0, z: 0}
-  ToNextAngleY: 0
-  ToPrevAngleY: 0
-  NextPos: {x: 0, y: 0, z: 0}
-  PrevPos: {x: 0, y: 0, z: 0}
-  NextGap: 0
-  PrevGap: 0
 --- !u!1 &4618712639652534779
 GameObject:
   m_ObjectHideFlags: 0

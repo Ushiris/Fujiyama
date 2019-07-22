@@ -104,6 +104,11 @@ public class PlayerController : MonoBehaviour
         {
             transform.SetPositionAndRotation(def_p, def_q);
         }
+        if(Input.GetKeyDown(KeyCode.F))
+        {
+            IsGondra = false;
+            rb.useGravity = true;
+        }
     }
 
 
@@ -114,6 +119,14 @@ public class PlayerController : MonoBehaviour
         {
             IsCollision = true;
             looked = looking;
+        }
+
+        //ゴンドラに乗る処理
+        if (collision.gameObject.tag == "gondra")
+        {
+            IsGondra = true;
+            rb.velocity = Vector3.zero;
+            rb.useGravity = false;
         }
     }
 
@@ -147,12 +160,6 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.tag != "Plane")
         {
             IsCollision = false;
-        }
-
-        //ゴンドラに乗る処理
-        if(collision.gameObject.tag=="gondra")
-        {
-            IsGondra = true;
         }
     }
 

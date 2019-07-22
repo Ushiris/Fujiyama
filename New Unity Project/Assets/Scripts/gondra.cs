@@ -7,7 +7,6 @@ public class gondra : MonoBehaviour
     public Vector3 to;
     public float speed;
 
-
     Vector3 from;
     float timer = 0;
     float par_b = 0;
@@ -28,8 +27,13 @@ public class gondra : MonoBehaviour
         if(IsJoinPL)
         {
             timer += Time.deltaTime;
-            float par = timer / speed;
-            Vector3 add = to - from;
+            timer = (timer > speed) ? (speed - timer) : timer;
+            float par = timer / (speed/2);
+            par = (par > 1) ? (2 - par) : par;
+            Vector3 add = (to - from)*(par-par_b);
+            player.ForceMove(add);
+            transform.position += add;
+            par_b = par;
         }
     }
 
@@ -44,6 +48,14 @@ public class gondra : MonoBehaviour
                 player = collision.gameObject.GetComponent<PlayerController>();
                 IsKnowPL = true;
             }
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            IsJoinPL = false;
         }
     }
 }
