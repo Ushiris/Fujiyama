@@ -68,7 +68,7 @@ public class PlayerController : MonoBehaviour
             {
                 ForceMove(transform.TransformDirection(Vector3.up) * speed);
             }
-            else if(!IsCollision || looked != looking)
+            else if(IsMovable())
             {
                 ForceMove(transform.TransformDirection(Vector3.forward) * speed);
             }
@@ -86,7 +86,7 @@ public class PlayerController : MonoBehaviour
             {
                 ForceMove(transform.TransformDirection(Vector3.down) * speed);
             }
-            else if(!IsCollision|| looked!=looking)
+            else if(IsMovable())
             {
                 ForceMove(transform.TransformDirection(Vector3.forward) * speed);
             }
@@ -197,5 +197,10 @@ public class PlayerController : MonoBehaviour
         {
             speed = DefaultSpeed;
         }
+    }
+
+    public bool IsMovable()
+    {
+        return (!IsCollision || looked != looking) && !IsGondra;
     }
 }
