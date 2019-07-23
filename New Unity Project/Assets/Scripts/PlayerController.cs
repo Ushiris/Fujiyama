@@ -26,9 +26,9 @@ public class PlayerController : MonoBehaviour
     public List<KeyCode> left;
 
     //キャラクターのステート
+    public bool IsGondra = false;
     bool IsGround = false;
     bool IsLadder = false;
-    bool IsGondra = false;
     bool IsCollision = false;
 
     //コンポーネント置き場
@@ -103,11 +103,6 @@ public class PlayerController : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.R))
         {
             transform.SetPositionAndRotation(def_p, def_q);
-        }
-        if(Input.GetKeyDown(KeyCode.F))
-        {
-            IsGondra = false;
-            rb.useGravity = true;
         }
     }
 
@@ -202,5 +197,12 @@ public class PlayerController : MonoBehaviour
     public bool IsMovable()
     {
         return (!IsCollision || looked != looking) && !IsGondra;
+    }
+
+    public void GondraExit()
+    {
+
+        IsGondra = false;
+        rb.useGravity = true;
     }
 }

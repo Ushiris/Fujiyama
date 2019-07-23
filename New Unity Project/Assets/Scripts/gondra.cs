@@ -2,6 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+enum GondraType
+{
+    cloud,
+    walk,
+}
+
+
 public class gondra : MonoBehaviour
 {
     public Vector3 to;
@@ -12,6 +19,7 @@ public class gondra : MonoBehaviour
     float par_b = 0;
     bool IsJoinPL = false;
     bool IsKnowPL = false;
+    bool IsGo = true;
     PlayerController player;
 
 
@@ -27,9 +35,23 @@ public class gondra : MonoBehaviour
         if(IsJoinPL)
         {
             timer += Time.deltaTime;
+            if(timer>speed)
+            {
+                IsGo = true;
+            }
             timer = (timer > speed) ? (speed - timer) : timer;
+            
             float par = timer / (speed/2);
-            par = (par > 1) ? (2 - par) : par;
+            if (par > 1)
+            {
+                par = 2 - par;
+                if (IsGo)
+                {
+                    player.ForceMove(new Vector3(0, 0.1f, 0));
+                    player.GondraExit();
+                    IsGo = false;
+                }
+            }
             Vector3 add = (to - from)*(par-par_b);
             player.ForceMove(add);
             transform.position += add;
@@ -57,5 +79,10 @@ public class gondra : MonoBehaviour
         {
             IsJoinPL = false;
         }
+    }
+
+    void GondraExitMove()
+    {
+
     }
 }
