@@ -55,52 +55,54 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (IsInput(right))
+        if (IsInput(right) && IsMovable())
         {
             if (looking != LR.right)
             {
                 Std.Swap(ref to, ref from);
-                Look(to);
                 looking = LR.right;
             }
+
+            Look(to);
 
             if (IsLadder)
             {
                 ForceMove(transform.TransformDirection(Vector3.up) * speed);
             }
-            else if(IsMovable())
+            else if (IsMovable())
             {
                 ForceMove(transform.TransformDirection(Vector3.forward) * speed);
             }
         }
-        else if (IsInput(left))
+        else if (IsInput(left) && IsMovable())
         {
             if (looking != LR.left)
             {
                 Std.Swap(ref to, ref from);
-                Look(to);
                 looking = LR.left;
             }
 
-            if (IsLadder&&!IsGround)
+            Look(to);
+
+            if (IsLadder && !IsGround)
             {
                 ForceMove(transform.TransformDirection(Vector3.down) * speed);
             }
-            else if(IsMovable())
+            else if (IsMovable())
             {
                 ForceMove(transform.TransformDirection(Vector3.forward) * speed);
             }
         }
 
         //ジャンプの処理。IsGroundは自作の変数であることに注意。
-        if(Input.GetKeyDown(KeyCode.Space) && IsGround && !IsLadder)
+        if (Input.GetKeyDown(KeyCode.Space) && IsCanJamp())
         {
             rb.AddForce(new Vector3(0, JumpFouce));
             speed /= 2;
         }
 
         //debug
-        if(Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R))
         {
             transform.SetPositionAndRotation(def_p, def_q);
         }
@@ -114,14 +116,6 @@ public class PlayerController : MonoBehaviour
         {
             IsCollision = true;
             looked = looking;
-        }
-
-        //ゴンドラに乗る処理
-        if (collision.gameObject.tag == "gondra")
-        {
-            IsGondra = true;
-            rb.velocity = Vector3.zero;
-            rb.useGravity = false;
         }
     }
 
@@ -199,9 +193,21 @@ public class PlayerController : MonoBehaviour
         return (!IsCollision || looked != looking) && !IsGondra;
     }
 
-    public void GondraExit()
+    public bool IsCanJamp()
     {
+        return IsGround && !IsLadder && !IsCollision;
+    }
 
+    public void GondraEnter()
+    {
+        IsGondra = true;
+        rb.velocity = Vector3.zero;
+        rb.useGravity = false;
+    }
+
+    public void GondraExit(Vector3 Alighting)
+    {
+        rb.AddForce(Alighting);
         IsGondra = false;
         rb.useGravity = true;
     }

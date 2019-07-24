@@ -6,6 +6,7 @@ public class PathFinder : MonoBehaviour
 {
     CheckPoint path;
     PlayerController player;
+    bool isHit = false;
 
     // Start is called before the first frame update
     void Start()
@@ -19,14 +20,24 @@ public class PathFinder : MonoBehaviour
         
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
-        if (other.tag == "CheckPoint")
+        if (!isHit)
         {
-            path = other.gameObject.GetComponent<CheckPoint>();
-            player.from = path;
-            player.to = (player.looking == LR.right) ? (path.NextCP) : (path.PrevCP);
-            player.Look(player.to);
+            if (other.tag == "CheckPoint")
+            {
+                path = other.gameObject.GetComponent<CheckPoint>();
+                player.from = path;
+                player.to = (player.looking == LR.right) ? (path.NextCP) : (path.PrevCP);
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.tag=="CheckPoint")
+        {
+            isHit = false;
         }
     }
 }
