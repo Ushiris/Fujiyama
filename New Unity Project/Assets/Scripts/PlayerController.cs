@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿/* Made by Ushiris */
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -55,7 +57,9 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (IsInput(right) && IsMovable())
+        rb.velocity = Vector3.zero;
+
+        if (IsInput(right))
         {
             if (looking != LR.right)
             {
@@ -74,7 +78,7 @@ public class PlayerController : MonoBehaviour
                 ForceMove(transform.TransformDirection(Vector3.forward) * speed);
             }
         }
-        else if (IsInput(left) && IsMovable())
+        else if (IsInput(left))
         {
             if (looking != LR.left)
             {
@@ -195,7 +199,7 @@ public class PlayerController : MonoBehaviour
 
     public bool IsCanJamp()
     {
-        return IsGround && !IsLadder && !IsCollision;
+        return IsGround && !IsLadder;
     }
 
     public void GondraEnter()

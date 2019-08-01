@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿/* Made by Ushiris */
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
