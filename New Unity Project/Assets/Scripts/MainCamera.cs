@@ -23,7 +23,6 @@ public class MainCamera : MonoBehaviour
         if (playerController.looking == LR.right)
         {
             transform.Rotate(new Vector3(0, 270, 0));
-
         }
         else
         {

@@ -1,6 +1,4 @@
-﻿/* Made by Ushiris */
-
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,9 +13,8 @@ public class PlayerController : MonoBehaviour
 {
     //動作のパラメータ
     public float speed = 1;
-    public float LadderSpeed = 1;
     public float JumpFouce;
-    
+
     //初期設定
     public LR looking;
     public CheckPoint from;
@@ -36,7 +33,7 @@ public class PlayerController : MonoBehaviour
     //コンポーネント置き場
     Rigidbody rb;
 
-    //変数の保存や一時的な記録
+    //変数の初期値の保存や一時的な記録
     float DefaultSpeed;
     LR looked = LR.right;
 
@@ -57,8 +54,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        rb.velocity = Vector3.zero;
-
+        //左右の動作
         if (IsInput(right))
         {
             if (looking != LR.right)
@@ -68,7 +64,7 @@ public class PlayerController : MonoBehaviour
             }
 
             Look(to);
-
+            
             if (IsLadder)
             {
                 ForceMove(transform.TransformDirection(Vector3.up) * speed);
@@ -102,7 +98,6 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && IsCanJamp())
         {
             rb.AddForce(new Vector3(0, JumpFouce));
-            speed /= 2;
         }
 
         //debug
@@ -112,28 +107,35 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
+    //Collision判定（判定相手がisTriggerを持ってない場合に呼び出されます）
     private void OnCollisionEnter(Collision collision)
     {
         //地面以外に当たっているということの確認
-        if(collision.gameObject.tag!="Plane")
+        if (collision.gameObject.tag != "Plane")
         {
             IsCollision = true;
             looked = looking;
         }
     }
+    private void OnCollisionExit(Collision collision)
+    {
+        //地面以外との衝突の解消
+        if (collision.gameObject.tag != "Plane")
+        {
+            IsCollision = false;
+        }
+    }
 
+    //Trigger判定（判定相手がIsTriggrの場合に呼び出されます）
     private void OnTriggerEnter(Collider other)
     {
         //はしごに足をかけているかどうかの判定
         if (other.tag == "Ladder")
         {
             IsLadder = true;
-            speed = LadderSpeed;
             rb.useGravity = false;
             rb.velocity = Vector3.zero;
         }
-        
     }
 
     private void OnTriggerExit(Collider other)
@@ -146,16 +148,7 @@ public class PlayerController : MonoBehaviour
             rb.useGravity = true;
         }
     }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        //衝突の解消
-        if (collision.gameObject.tag != "Plane")
-        {
-            IsCollision = false;
-        }
-    }
-
+    
     //CheckPoint用のLookAt関数。高さを無視します。
     public void Look(CheckPoint to)
     {
@@ -166,14 +159,13 @@ public class PlayerController : MonoBehaviour
     //二つ以上のキー入力をif内に書くと汚いのでまとめました
     bool IsInput(List<KeyCode> keyCodes)
     {
-        foreach(var a in keyCodes)
+        foreach (var a in keyCodes)
         {
-            if(Input.GetKey(a))
+            if (Input.GetKey(a))
             {
                 return true;
             }
         }
-
         return false;
     }
 
@@ -183,32 +175,24 @@ public class PlayerController : MonoBehaviour
         transform.position += add;
     }
 
-    public void Ground(bool tf)
+    //地面との接触、離脱時に呼ぶ関数。
+    public void Ground(bool hitG)
     {
-        IsGround = tf;
-        if(tf)
-        {
-            speed = DefaultSpeed;
-        }
+        IsGround = hitG;
+        speed = hitG ? DefaultSpeed : (speed / 2);
     }
 
-    public bool IsMovable()
-    {
-        return (!IsCollision || looked != looking) && !IsGondra;
-    }
+    //ステート系
+    public bool IsMovable() { return (!IsCollision || looked != looking) && !IsGondra; }
+    public bool IsCanJamp() { return IsGround && !IsLadder; }
 
-    public bool IsCanJamp()
-    {
-        return IsGround && !IsLadder;
-    }
-
+    //ゴンドラ関係。
     public void GondraEnter()
     {
         IsGondra = true;
         rb.velocity = Vector3.zero;
         rb.useGravity = false;
     }
-
     public void GondraExit(Vector3 Alighting)
     {
         rb.AddForce(Alighting);

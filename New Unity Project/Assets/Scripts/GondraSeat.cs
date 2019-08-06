@@ -13,12 +13,6 @@ public class GondraSeat : MonoBehaviour
         gondra_ = GetComponentInParent<gondra>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player")

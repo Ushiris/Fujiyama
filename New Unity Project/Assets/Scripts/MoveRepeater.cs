@@ -26,10 +26,11 @@ public class MoveRepeater : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //次フレームの座標の決定
         timer += Time.deltaTime;
         timer = (timer > speed) ? (timer - speed) : timer;
         float par = ((timer > harfTime) ? (speed - timer) : timer) / harfTime;
-        float x = (to.x - from.x) * ( par - par_b);
+        float x = (to.x - from.x) * (par - par_b);
         float y = (to.y - from.y) * (par - par_b);
         float z = (to.z - from.z) * (par - par_b);
         par_b = par;
@@ -45,10 +46,11 @@ public class MoveRepeater : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.tag=="Player")
+        if (collision.gameObject.tag == "Player")
         {
             IsAbovePL = true;
 
+            //プレイヤーを記憶する処理
             if (!plKnow)
             {
                 GameObject playerGO = collision.gameObject;

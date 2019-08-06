@@ -15,13 +15,7 @@ public class PathFinder : MonoBehaviour
     {
         player = gameObject.GetComponentInParent<PlayerController>();
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    
     private void OnTriggerStay(Collider other)
     {
         if (!isHit)
