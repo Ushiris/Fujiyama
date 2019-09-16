@@ -117,6 +117,19 @@ public class PlayerController : MonoBehaviour
             looked = looking;
         }
     }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        //はしごに足をかけているかどうかの判定
+        if (collision.gameObject.tag == "Ladder")
+        {
+            IsLadder = true;
+            rb.useGravity = false;
+            rb.velocity = Vector3.zero;
+        }
+
+    }
+
     private void OnCollisionExit(Collision collision)
     {
         //地面以外との衝突の解消
@@ -124,24 +137,9 @@ public class PlayerController : MonoBehaviour
         {
             IsCollision = false;
         }
-    }
 
-    //Trigger判定（判定相手がIsTriggrの場合に呼び出されます）
-    private void OnTriggerEnter(Collider other)
-    {
-        //はしごに足をかけているかどうかの判定
-        if (other.tag == "Ladder")
-        {
-            IsLadder = true;
-            rb.useGravity = false;
-            rb.velocity = Vector3.zero;
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
         //梯子を下りた時の処理
-        if (other.tag == "Ladder")
+        if (collision.gameObject.tag == "Ladder")
         {
             IsLadder = false;
             speed = DefaultSpeed;
@@ -179,7 +177,7 @@ public class PlayerController : MonoBehaviour
     public void Ground(bool hitG)
     {
         IsGround = hitG;
-        speed = hitG ? DefaultSpeed : (speed / 2);
+        speed = hitG ? DefaultSpeed : (speed * 2 / 3);
     }
 
     //ステート系
