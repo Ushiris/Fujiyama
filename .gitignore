@@ -36,4 +36,4 @@ sysinfo.txt
 *.unitypackage
 
 # Models ignore
-.resouces-a/
+resouces/
