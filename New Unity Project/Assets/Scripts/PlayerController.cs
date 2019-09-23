@@ -6,7 +6,8 @@ using UnityEngine;
 public enum LR
 {
     right,
-    left
+    left,
+    none
 }
 
 public class PlayerController : MonoBehaviour
@@ -32,10 +33,10 @@ public class PlayerController : MonoBehaviour
 
     //コンポーネント置き場
     Rigidbody rb;
+    GameObject body;
 
     //変数の初期値の保存や一時的な記録
     float DefaultSpeed;
-    LR looked = LR.right;
 
     //debug
     Vector3 def_p;
@@ -54,46 +55,44 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        LR InputLR = InputLorR();
+
         //左右の動作
-        if (IsInput(right))
+        if (InputLR != LR.none)
         {
-            if (looking != LR.right)
+            float x = 0, y, z = 0;
+            Vector3 moveArrow;
+
+            if (looking != InputLR)
             {
                 Std.Swap(ref to, ref from);
-                looking = LR.right;
+                looking = InputLR;
             }
-
             Look(to);
-            
-            if (IsLadder)
+
+            if (!IsGondra)
             {
-                ForceMove(transform.TransformDirection(Vector3.up) * speed);
-            }
-            else if (IsMovable())
-            {
-                ForceMove(transform.TransformDirection(Vector3.forward) * speed);
+                if (!IsLadder)
+                {
+                    moveArrow = Vector3.forward;
+                    y = rb.velocity.y;
+                }
+                else
+                {
+                    moveArrow = InputLR == LR.right ? Vector3.up : Vector3.down;
+                    y = (transform.TransformDirection(moveArrow) * speed).y;
+                }
+                x = (transform.TransformDirection(moveArrow) * speed).x;
+                z = (transform.TransformDirection(moveArrow) * speed).z;
+
+                rb.velocity = new Vector3(x, y, z);
             }
         }
-        else if (IsInput(left))
+        else
         {
-            if (looking != LR.left)
-            {
-                Std.Swap(ref to, ref from);
-                looking = LR.left;
-            }
-
-            Look(to);
-
-            if (IsLadder && !IsGround)
-            {
-                ForceMove(transform.TransformDirection(Vector3.down) * speed);
-            }
-            else if (IsMovable())
-            {
-                ForceMove(transform.TransformDirection(Vector3.forward) * speed);
-            }
+            rb.velocity = new Vector3(0, rb.velocity.y, 0);
         }
-
+        
         //ジャンプの処理。IsGroundは自作の変数であることに注意。
         if (Input.GetKeyDown(KeyCode.Space) && IsCanJamp())
         {
@@ -110,11 +109,12 @@ public class PlayerController : MonoBehaviour
     //Collision判定（判定相手がisTriggerを持ってない場合に呼び出されます）
     private void OnCollisionEnter(Collision collision)
     {
-        //地面以外に当たっているということの確認
-        if (collision.gameObject.tag != "Plane")
+        //はしごに足をかけ始めたどうかの判定
+        if (collision.gameObject.tag == "Ladder")
         {
-            IsCollision = true;
-            looked = looking;
+            IsLadder = true;
+            rb.useGravity = false;
+            rb.velocity = Vector3.zero;
         }
     }
 
@@ -124,20 +124,11 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.tag == "Ladder")
         {
             IsLadder = true;
-            rb.useGravity = false;
-            rb.velocity = Vector3.zero;
         }
-
     }
 
     private void OnCollisionExit(Collision collision)
     {
-        //地面以外との衝突の解消
-        if (collision.gameObject.tag != "Plane")
-        {
-            IsCollision = false;
-        }
-
         //梯子を下りた時の処理
         if (collision.gameObject.tag == "Ladder")
         {
@@ -155,16 +146,25 @@ public class PlayerController : MonoBehaviour
     }
 
     //二つ以上のキー入力をif内に書くと汚いのでまとめました
-    bool IsInput(List<KeyCode> keyCodes)
+    LR InputLorR()
     {
-        foreach (var a in keyCodes)
+        foreach (var a in right)
         {
             if (Input.GetKey(a))
             {
-                return true;
+                return LR.right;
             }
         }
-        return false;
+
+        foreach(var a in left)
+        {
+            if (Input.GetKey(a))
+            {
+                return LR.left;
+            }
+        }
+
+        return LR.none;
     }
 
     //強制的にpositionを+addします
@@ -181,7 +181,6 @@ public class PlayerController : MonoBehaviour
     }
 
     //ステート系
-    public bool IsMovable() { return (!IsCollision || looked != looking) && !IsGondra; }
     public bool IsCanJamp() { return IsGround && !IsLadder; }
 
     //ゴンドラ関係。
