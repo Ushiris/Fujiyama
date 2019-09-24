@@ -10,6 +10,15 @@ public enum LR
     none
 }
 
+public enum InputCommand
+{
+    right,
+    left,
+    jump,
+    action,
+    none
+}
+
 public class PlayerController : MonoBehaviour
 {
     //動作のパラメータ
@@ -22,8 +31,10 @@ public class PlayerController : MonoBehaviour
     public CheckPoint to;
 
     //入力の設定
-    public List<KeyCode> right;
-    public List<KeyCode> left;
+    public List<KeyCode> right = new List<KeyCode> { KeyCode.D, KeyCode.RightArrow };
+    public List<KeyCode> left = new List<KeyCode> { KeyCode.A, KeyCode.LeftArrow };
+    public List<KeyCode> jump = new List<KeyCode> { KeyCode.Space };
+    public List<KeyCode> action = new List<KeyCode> { KeyCode.W };
 
     //キャラクターのステート
     public bool IsGondra = false;
