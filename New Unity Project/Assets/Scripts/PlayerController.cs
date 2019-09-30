@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 //見ている向き
 public enum LR
 {
@@ -10,6 +11,7 @@ public enum LR
     none
 }
 
+//入力のリスト
 public enum InputCommand
 {
     right,
@@ -19,8 +21,22 @@ public enum InputCommand
     none
 }
 
+public class MyInput
+{
+    public InputCommand name;
+    public bool isInput = false;
+
+    public MyInput(InputCommand a, bool b)
+    {
+        name = a;
+        isInput = b;
+    }
+}
+
 public class PlayerController : MonoBehaviour
 {
+    private const int STATENUM = 4;
+
     //動作のパラメータ
     public float speed = 1;
     public float JumpFouce;
@@ -41,6 +57,13 @@ public class PlayerController : MonoBehaviour
     bool IsGround = false;
     bool IsLadder = false;
     bool IsCollision = false;
+    List<MyInput> PlayerInput = new List<MyInput>
+    {
+        new MyInput(InputCommand.right,false),
+        new MyInput(InputCommand.left,false),
+        new MyInput(InputCommand.jump,false),
+        new MyInput(InputCommand.action,false),
+    };
 
     //コンポーネント置き場
     Rigidbody rb;
@@ -48,6 +71,7 @@ public class PlayerController : MonoBehaviour
 
     //変数の初期値の保存や一時的な記録
     float DefaultSpeed;
+    bool[] beforeComm = { false, false, false, false };
 
     //debug
     Vector3 def_p;
@@ -66,55 +90,72 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        LR InputLR = InputLorR();
-
-        //左右の動作
-        if (InputLR != LR.none)
+        bool moved = false;
+        if (InputCheck())
         {
-            float x = 0, y, z = 0;
-            Vector3 moveArrow;
-
-            if (looking != InputLR)
+            if (getState(InputCommand.right) || getState(InputCommand.left))
             {
-                Std.Swap(ref to, ref from);
-                looking = InputLR;
+                Move(LorR());
+                moved = true;
             }
-            Look(to);
 
-            if (!IsGondra)
+            if (getState(InputCommand.jump))
             {
-                if (!IsLadder)
-                {
-                    moveArrow = Vector3.forward;
-                    y = rb.velocity.y;
-                }
-                else
-                {
-                    moveArrow = InputLR == LR.right ? Vector3.up : Vector3.down;
-                    y = (transform.TransformDirection(moveArrow) * speed).y;
-                }
-                x = (transform.TransformDirection(moveArrow) * speed).x;
-                z = (transform.TransformDirection(moveArrow) * speed).z;
-
-                rb.velocity = new Vector3(x, y, z);
+                rb.AddForce(new Vector3(0, JumpFouce));
             }
+
         }
-        else
+        if (!moved)
         {
             rb.velocity = new Vector3(0, rb.velocity.y, 0);
         }
-        
-        //ジャンプの処理。IsGroundは自作の変数であることに注意。
-        if (Input.GetKeyDown(KeyCode.Space) && IsCanJamp())
-        {
-            rb.AddForce(new Vector3(0, JumpFouce));
-        }
+
+        rb.angularVelocity = Vector3.zero;
+
 
         //debug
         if (Input.GetKeyDown(KeyCode.R))
         {
             transform.SetPositionAndRotation(def_p, def_q);
         }
+    }
+
+    private bool Move(LR InputLR)
+    {
+        //体の向きの変更
+        if (looking != InputLR)
+        {
+            Std.Swap(ref to, ref from);
+            looking = InputLR;
+        }
+        Look(to);
+
+        //動作する向きの設定
+        float x = 0, y, z = 0;
+        Vector3 moveArrow;
+
+        if (!IsLadder)
+        {
+            moveArrow = Vector3.forward;
+        }
+        else
+        {
+            moveArrow = (InputLR == LR.right) ? Vector3.up : Vector3.down;
+        }
+
+        //動作する速度の設定
+        x = (transform.TransformDirection(moveArrow) * speed).x;
+        y = IsLadder ? (transform.TransformDirection(moveArrow)).y : rb.velocity.y;
+        z = (transform.TransformDirection(moveArrow) * speed).z;
+        rb.velocity = new Vector3(x, y, z);
+
+        return true;
+    }
+
+    //動作方向が右なのか左なのか判定します。予めInputCheck関数で例外をはじき、左右どちらかの入力があることを前提としています。
+    LR LorR()
+    {
+        return getState(InputCommand.right) ? LR.right : LR.left;
     }
 
     //Collision判定（判定相手がisTriggerを持ってない場合に呼び出されます）
@@ -156,26 +197,42 @@ public class PlayerController : MonoBehaviour
         transform.LookAt(lookPos);
     }
 
-    //二つ以上のキー入力をif内に書くと汚いのでまとめました
-    LR InputLorR()
+    //入力の確認。不正なタイミングや不正な同時入力のコマンドを無視します。
+    bool InputCheck()
     {
-        foreach (var a in right)
+        bool[] state = { Std.CheckKeyList(right), Std.CheckKeyList(left), Std.CheckKeyList(jump), Std.CheckKeyList(action) };
+
+        if (IsGondra || (state[0] && state[1]))
         {
-            if (Input.GetKey(a))
-            {
-                return LR.right;
-            }
+            state[0] = false;
+            state[1] = false;
+        }
+        if (state[2] && !IsCanJamp())
+        {
+            state[2] = false;
         }
 
-        foreach(var a in left)
+        int count = 0;
+        for (int i = 0; i < STATENUM; i++)
         {
-            if (Input.GetKey(a))
+            if (state[i] != beforeComm[i] || beforeComm[i])
             {
-                return LR.left;
+                break;
             }
+            count++;
+        }
+        beforeComm = state;
+        if(count==STATENUM)
+        {
+            return false;
         }
 
-        return LR.none;
+        setState(InputCommand.right, state[0]);
+        setState(InputCommand.left, state[1]);
+        setState(InputCommand.jump, state[2]);
+        setState(InputCommand.action, state[3]);
+
+        return true;
     }
 
     //強制的にpositionを+addします
@@ -192,7 +249,23 @@ public class PlayerController : MonoBehaviour
     }
 
     //ステート系
-    public bool IsCanJamp() { return IsGround && !IsLadder; }
+    public bool IsCanJamp()
+    {
+        if(IsLadder)
+        {
+            return false;
+        }
+        if(!IsGround)
+        {
+            return false;
+        }
+        if(rb.velocity.y>3.5f)
+        {
+            return false;
+        }
+
+        return true;
+    }
 
     //ゴンドラ関係。
     public void GondraEnter()
@@ -206,5 +279,29 @@ public class PlayerController : MonoBehaviour
         rb.AddForce(Alighting);
         IsGondra = false;
         rb.useGravity = true;
+    }
+
+    private void setState(InputCommand comm,bool isInput)
+    {
+        foreach (var item in PlayerInput)
+        {
+            if(item.name==comm)
+            {
+                item.isInput = isInput;
+            }
+        }
+    }
+
+    private bool getState(InputCommand comm)
+    {
+        foreach (var item in PlayerInput)
+        {
+            if (item.name == comm)
+            {
+                return item.isInput;
+            }
+        }
+
+        return false;
     }
 }

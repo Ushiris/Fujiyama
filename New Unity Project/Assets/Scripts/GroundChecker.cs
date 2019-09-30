@@ -7,8 +7,7 @@ using UnityEngine;
 public class GroundChecker : MonoBehaviour
 {
     PlayerController player;
-
-
+    
     void Start()
     {
         player = GetComponentInParent<PlayerController>();

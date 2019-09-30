@@ -12,4 +12,16 @@ public class Std : MonoBehaviour
         a = b;
         b = tmp;
     }
+
+    public static bool CheckKeyList(List<KeyCode> keyCodes)
+    {
+        foreach (var a in keyCodes)
+        {
+            if (Input.GetKey(a))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }
