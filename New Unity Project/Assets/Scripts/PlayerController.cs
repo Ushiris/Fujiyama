@@ -7,18 +7,17 @@ using UnityEngine;
 public enum LR
 {
     right,
-    left,
-    none
+    left
 }
 
 //入力のリスト
 public enum InputCommand
 {
-    right,
-    left,
-    jump,
-    action,
-    none
+    right=0,
+    left=1,
+    jump=2,
+    action=3,
+    none=999
 }
 
 public class MyInput
@@ -57,13 +56,7 @@ public class PlayerController : MonoBehaviour
     bool IsGround = false;
     bool IsLadder = false;
     bool IsCollision = false;
-    List<MyInput> PlayerInput = new List<MyInput>
-    {
-        new MyInput(InputCommand.right,false),
-        new MyInput(InputCommand.left,false),
-        new MyInput(InputCommand.jump,false),
-        new MyInput(InputCommand.action,false),
-    };
+    bool[] PlayerInput = { false, };
 
     //コンポーネント置き場
     Rigidbody rb;
@@ -93,18 +86,19 @@ public class PlayerController : MonoBehaviour
         bool moved = false;
         if (InputCheck())
         {
-            if (getState(InputCommand.right) || getState(InputCommand.left))
+            if (PlayerInput[(int)InputCommand.right] || PlayerInput[(int)InputCommand.left])
             {
-                Move(LorR());
+                Move(PlayerInput[(int)InputCommand.right] ? LR.right : LR.left);
                 moved = true;
             }
 
-            if (getState(InputCommand.jump))
+            if (PlayerInput[(int)InputCommand.jump])
             {
                 rb.AddForce(new Vector3(0, JumpFouce));
             }
 
         }
+
         if (!moved)
         {
             rb.velocity = new Vector3(0, rb.velocity.y, 0);
@@ -152,12 +146,6 @@ public class PlayerController : MonoBehaviour
         return true;
     }
 
-    //動作方向が右なのか左なのか判定します。予めInputCheck関数で例外をはじき、左右どちらかの入力があることを前提としています。
-    LR LorR()
-    {
-        return getState(InputCommand.right) ? LR.right : LR.left;
-    }
-
     //Collision判定（判定相手がisTriggerを持ってない場合に呼び出されます）
     private void OnCollisionEnter(Collision collision)
     {
@@ -202,14 +190,14 @@ public class PlayerController : MonoBehaviour
     {
         bool[] state = { Std.CheckKeyList(right), Std.CheckKeyList(left), Std.CheckKeyList(jump), Std.CheckKeyList(action) };
 
-        if (IsGondra || (state[0] && state[1]))
+        if (IsGondra || (state[(int)InputCommand.right] && state[(int)InputCommand.left]))
         {
-            state[0] = false;
-            state[1] = false;
+            state[(int)InputCommand.right] = false;
+            state[(int)InputCommand.left] = false;
         }
-        if (state[2] && !IsCanJamp())
+        if (state[(int)InputCommand.jump] && !IsCanJamp())
         {
-            state[2] = false;
+            state[(int)InputCommand.jump] = false;
         }
 
         int count = 0;
@@ -221,16 +209,14 @@ public class PlayerController : MonoBehaviour
             }
             count++;
         }
-        beforeComm = state;
         if(count==STATENUM)
         {
             return false;
         }
 
-        setState(InputCommand.right, state[0]);
-        setState(InputCommand.left, state[1]);
-        setState(InputCommand.jump, state[2]);
-        setState(InputCommand.action, state[3]);
+        beforeComm = state;
+
+        PlayerInput = state;
 
         return true;
     }
@@ -259,6 +245,10 @@ public class PlayerController : MonoBehaviour
         {
             return false;
         }
+        if(IsGondra)
+        {
+            return false;
+        }
         if(rb.velocity.y>3.5f)
         {
             return false;
@@ -279,29 +269,5 @@ public class PlayerController : MonoBehaviour
         rb.AddForce(Alighting);
         IsGondra = false;
         rb.useGravity = true;
-    }
-
-    private void setState(InputCommand comm,bool isInput)
-    {
-        foreach (var item in PlayerInput)
-        {
-            if(item.name==comm)
-            {
-                item.isInput = isInput;
-            }
-        }
-    }
-
-    private bool getState(InputCommand comm)
-    {
-        foreach (var item in PlayerInput)
-        {
-            if (item.name == comm)
-            {
-                return item.isInput;
-            }
-        }
-
-        return false;
     }
 }

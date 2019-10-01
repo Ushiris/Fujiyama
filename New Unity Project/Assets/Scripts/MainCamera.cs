@@ -28,7 +28,7 @@ public class MainCamera : MonoBehaviour
         {
             transform.Rotate(new Vector3(0, 90, 0));
         }
-
+        
         //プレイヤーと同一の座標へ向かい、そこから離れます。
         transform.position = player.transform.position;
         transform.Translate(0, 2, -4, Space.Self);
