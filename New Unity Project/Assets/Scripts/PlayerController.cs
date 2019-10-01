@@ -20,24 +20,13 @@ public enum InputCommand
     none=999
 }
 
-public class MyInput
-{
-    public InputCommand name;
-    public bool isInput = false;
-
-    public MyInput(InputCommand a, bool b)
-    {
-        name = a;
-        isInput = b;
-    }
-}
-
 public class PlayerController : MonoBehaviour
 {
-    private const int STATENUM = 4;
+    //定数
+    private const int COMMNUM = 4;
 
     //動作のパラメータ
-    public float speed = 1;
+    public float speed;
     public float JumpFouce;
 
     //初期設定
@@ -46,10 +35,10 @@ public class PlayerController : MonoBehaviour
     public CheckPoint to;
 
     //入力の設定
-    public List<KeyCode> right = new List<KeyCode> { KeyCode.D, KeyCode.RightArrow };
-    public List<KeyCode> left = new List<KeyCode> { KeyCode.A, KeyCode.LeftArrow };
-    public List<KeyCode> jump = new List<KeyCode> { KeyCode.Space };
-    public List<KeyCode> action = new List<KeyCode> { KeyCode.W };
+    public List<KeyCode> right  = new List<KeyCode> { KeyCode.D,    KeyCode.RightArrow  };
+    public List<KeyCode> left   = new List<KeyCode> { KeyCode.A,    KeyCode.LeftArrow   };
+    public List<KeyCode> jump   = new List<KeyCode> { KeyCode.Space };
+    public List<KeyCode> action = new List<KeyCode> { KeyCode.W     };
 
     //キャラクターのステート
     public bool IsGondra = false;
@@ -62,13 +51,18 @@ public class PlayerController : MonoBehaviour
     Rigidbody rb;
     GameObject body;
 
-    //変数の初期値の保存や一時的な記録
+    //変数の初期値
     float DefaultSpeed;
+
+    //前フレームの状態の保存
     bool[] beforeComm = { false, false, false, false };
 
     //debug
     Vector3 def_p;
     Quaternion def_q;
+    CheckPoint def_f_CP;
+    CheckPoint def_t_CP;
+    LR def_l;
 
     // Start is called before the first frame update
     void Start()
@@ -78,39 +72,46 @@ public class PlayerController : MonoBehaviour
         Look(to);
         def_p = transform.position;
         def_q = transform.rotation;
+        def_f_CP = from;
+        def_t_CP = to;
+        def_l = looking;
     }
 
     // Update is called once per frame
     void Update()
     {
-        bool moved = false;
+        bool LRmoved = false;
         if (InputCheck())
         {
+            //左右に動く
             if (PlayerInput[(int)InputCommand.right] || PlayerInput[(int)InputCommand.left])
             {
                 Move(PlayerInput[(int)InputCommand.right] ? LR.right : LR.left);
-                moved = true;
+                LRmoved = true;
             }
 
+            //ジャンプする
             if (PlayerInput[(int)InputCommand.jump])
             {
                 rb.AddForce(new Vector3(0, JumpFouce));
             }
-
         }
 
-        if (!moved)
+        //左右の入力なし
+        if (!LRmoved)
         {
             rb.velocity = new Vector3(0, rb.velocity.y, 0);
         }
 
+        //回転力の消去
         rb.angularVelocity = Vector3.zero;
 
 
-        //debug
+        //debug code
         if (Input.GetKeyDown(KeyCode.R))
         {
-            transform.SetPositionAndRotation(def_p, def_q);
+            Reset();
+            
         }
     }
 
@@ -201,7 +202,7 @@ public class PlayerController : MonoBehaviour
         }
 
         int count = 0;
-        for (int i = 0; i < STATENUM; i++)
+        for (int i = 0; i < COMMNUM; i++)
         {
             if (state[i] != beforeComm[i] || beforeComm[i])
             {
@@ -209,7 +210,7 @@ public class PlayerController : MonoBehaviour
             }
             count++;
         }
-        if(count==STATENUM)
+        if(count==COMMNUM)
         {
             return false;
         }
@@ -234,40 +235,34 @@ public class PlayerController : MonoBehaviour
         speed = hitG ? DefaultSpeed : (speed * 2 / 3);
     }
 
-    //ステート系
+    //ジャンプできるかどうかの判定
     public bool IsCanJamp()
     {
-        if(IsLadder)
-        {
-            return false;
-        }
-        if(!IsGround)
-        {
-            return false;
-        }
-        if(IsGondra)
-        {
-            return false;
-        }
-        if(rb.velocity.y>3.5f)
-        {
-            return false;
-        }
-
-        return true;
+        return !(IsLadder || !IsGround || IsGondra || rb.velocity.y > 3.5f);
     }
 
-    //ゴンドラ関係。
+    //ゴンドラ乗車時の処理。プレイヤーの動きを静止させる。
     public void GondraEnter()
     {
         IsGondra = true;
         rb.velocity = Vector3.zero;
         rb.useGravity = false;
     }
+
+    //ゴンドラ下車時の処理。alightig分プレイヤーが吹き飛ばされる。
     public void GondraExit(Vector3 Alighting)
     {
         rb.AddForce(Alighting);
         IsGondra = false;
         rb.useGravity = true;
+    }
+
+    //debug code
+    private void Reset()
+    {
+        transform.SetPositionAndRotation(def_p, def_q);
+        from = def_f_CP;
+        to = def_t_CP;
+        looking = def_l;
     }
 }
