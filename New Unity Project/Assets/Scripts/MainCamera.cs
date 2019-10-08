@@ -16,7 +16,7 @@ public class MainCamera : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
         //プレイヤーの方向と同一の方向を向き、補正をかけます。
         transform.rotation =player.transform.rotation;

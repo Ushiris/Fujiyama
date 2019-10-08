@@ -15,7 +15,11 @@ public class PathFinder : MonoBehaviour
     {
         player = gameObject.GetComponentInParent<PlayerController>();
     }
-    
+
+    private void OnTriggerEnter(Collider other)
+    {
+    }
+
     private void OnTriggerStay(Collider other)
     {
         if (!isHit)

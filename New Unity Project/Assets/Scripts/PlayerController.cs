@@ -17,13 +17,16 @@ public enum InputCommand
     left=1,
     jump=2,
     action=3,
-    none=999
+    exit=4,
+    debug=5,
 }
 
 public class PlayerController : MonoBehaviour
 {
     //定数
     private const int COMMNUM = 4;
+    private const KeyCode ExitKey = KeyCode.Escape;
+    private const KeyCode DebugKey = KeyCode.B;
 
     //動作のパラメータ
     public float speed;
@@ -33,29 +36,31 @@ public class PlayerController : MonoBehaviour
     public LR looking;
     public CheckPoint from;
     public CheckPoint to;
+    public SaveManager SavePoint;
 
     //入力の設定
     public List<KeyCode> right  = new List<KeyCode> { KeyCode.D,    KeyCode.RightArrow  };
     public List<KeyCode> left   = new List<KeyCode> { KeyCode.A,    KeyCode.LeftArrow   };
     public List<KeyCode> jump   = new List<KeyCode> { KeyCode.Space };
     public List<KeyCode> action = new List<KeyCode> { KeyCode.W     };
+           List<KeyCode> exit   = new List<KeyCode> { ExitKey       };
+           List<KeyCode> debug  = new List<KeyCode> { DebugKey      };
 
     //キャラクターのステート
-    public bool IsGondra = false;
-    bool IsGround = false;
-    bool IsLadder = false;
+    bool IsGondra    = false;
+    bool IsGround    = false;
+    bool IsLadder    = false;
     bool IsCollision = false;
     bool[] PlayerInput = { false, };
 
     //コンポーネント置き場
     Rigidbody rb;
-    GameObject body;
 
     //変数の初期値
     float DefaultSpeed;
 
     //前フレームの状態の保存
-    bool[] beforeComm = { false, false, false, false };
+    bool[] beforeInput = { false };
 
     //debug
     Vector3 def_p;
@@ -75,43 +80,49 @@ public class PlayerController : MonoBehaviour
         def_f_CP = from;
         def_t_CP = to;
         def_l = looking;
+        InputCheck();
     }
 
     // Update is called once per frame
     void Update()
     {
         bool LRmoved = false;
-        if (InputCheck())
-        {
-            //左右に動く
-            if (PlayerInput[(int)InputCommand.right] || PlayerInput[(int)InputCommand.left])
-            {
-                Move(PlayerInput[(int)InputCommand.right] ? LR.right : LR.left);
-                LRmoved = true;
-            }
+        InputCheck();
 
-            //ジャンプする
-            if (PlayerInput[(int)InputCommand.jump])
-            {
-                rb.AddForce(new Vector3(0, JumpFouce));
-            }
+        //ゲームの終了
+        if(PlayerInput[(int)InputCommand.exit])
+        {
+            Quit();
         }
 
-        //左右の入力なし
+        //左右に動く
+        if (PlayerInput[(int)InputCommand.right] || PlayerInput[(int)InputCommand.left])
+        {
+            Move(PlayerInput[(int)InputCommand.right] ? LR.right : LR.left);
+            LRmoved = true;
+        }
+
+        //ジャンプする
+        if (PlayerInput[(int)InputCommand.jump])
+        {
+            rb.AddForce(new Vector3(0, JumpFouce));
+        }
+
+        //左右の入力なしなら、左右の速度を減衰させる
         if (!LRmoved)
         {
-            rb.velocity = new Vector3(0, rb.velocity.y, 0);
+            float x = Mathf.Abs(rb.velocity.x * 4 / 5f) < 0.05f ? (0.0f) : (rb.velocity.x * 4 / 5f);
+            float z = Mathf.Abs(rb.velocity.z * 4 / 5f) < 0.05f ? (0.0f) : (rb.velocity.z * 4 / 5f);
+            rb.velocity = new Vector3(x, rb.velocity.y, z);
         }
 
         //回転力の消去
         rb.angularVelocity = Vector3.zero;
 
-
         //debug code
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(DebugKey))
         {
             Reset();
-            
         }
     }
 
@@ -187,10 +198,17 @@ public class PlayerController : MonoBehaviour
     }
 
     //入力の確認。不正なタイミングや不正な同時入力のコマンドを無視します。
-    bool InputCheck()
+    void InputCheck()
     {
-        bool[] state = { Std.CheckKeyList(right), Std.CheckKeyList(left), Std.CheckKeyList(jump), Std.CheckKeyList(action) };
-
+        bool[] state =
+            {
+            Std.CheckKeyList(right),
+            Std.CheckKeyList(left),
+            Std.CheckKeyList(jump),
+            Std.CheckKeyList(action),
+            Std.CheckKeyList(new List<KeyCode>{ExitKey }),
+        };
+        
         if (IsGondra || (state[(int)InputCommand.right] && state[(int)InputCommand.left]))
         {
             state[(int)InputCommand.right] = false;
@@ -201,25 +219,8 @@ public class PlayerController : MonoBehaviour
             state[(int)InputCommand.jump] = false;
         }
 
-        int count = 0;
-        for (int i = 0; i < COMMNUM; i++)
-        {
-            if (state[i] != beforeComm[i] || beforeComm[i])
-            {
-                break;
-            }
-            count++;
-        }
-        if(count==COMMNUM)
-        {
-            return false;
-        }
-
-        beforeComm = state;
-
+        beforeInput = state;
         PlayerInput = state;
-
-        return true;
     }
 
     //強制的にpositionを+addします
@@ -255,6 +256,23 @@ public class PlayerController : MonoBehaviour
         rb.AddForce(Alighting);
         IsGondra = false;
         rb.useGravity = true;
+    }
+    
+    public void Respawn()
+    {
+        from = SavePoint.p_cp;
+        to = SavePoint.t_cp;
+        looking = SavePoint.look;
+        Look(to);
+    }
+
+    void Quit()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#elif UNITY_STANDALONE
+    UnityEngine.Application.Quit();
+#endif
     }
 
     //debug code

@@ -11,7 +11,6 @@ public class CheckPoint : MonoBehaviour
     public CheckPoint PrevCP;
     public CheckPoint NextCP;
 
-
     // Start is called before the first frame update
     void Start()
     {

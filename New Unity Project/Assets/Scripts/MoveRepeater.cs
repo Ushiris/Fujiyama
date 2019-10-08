@@ -7,7 +7,7 @@ using UnityEngine;
 public class MoveRepeater : MonoBehaviour
 {
     public Vector3 to;
-    public float speed = 3.0f;
+    public float seconds = 3.0f;
     PlayerController player;
     float timer = 0;
     float harfTime;
@@ -20,7 +20,7 @@ public class MoveRepeater : MonoBehaviour
     void Start()
     {
         from = transform.position;
-        harfTime = speed / 2;
+        harfTime = seconds / 2;
     }
 
     // Update is called once per frame
@@ -28,8 +28,8 @@ public class MoveRepeater : MonoBehaviour
     {
         //次フレームの座標の決定
         timer += Time.deltaTime;
-        timer = (timer > speed) ? (timer - speed) : timer;
-        float par = ((timer > harfTime) ? (speed - timer) : timer) / harfTime;
+        timer = (timer > seconds) ? (timer - seconds) : timer;
+        float par = ((timer > harfTime) ? (seconds - timer) : timer) / harfTime;
         float x = (to.x - from.x) * (par - par_b);
         float y = (to.y - from.y) * (par - par_b);
         float z = (to.z - from.z) * (par - par_b);
