@@ -11,20 +11,20 @@ public enum LR
 }
 
 //入力のリスト
-public enum InputCommand
+public enum Commands
 {
-    right=0,
-    left=1,
-    jump=2,
-    action=3,
-    exit=4,
-    debug=5,
+    right,
+    left,
+    jump,
+    action,
+    exit,
+    debug,
+    END,
 }
 
 public class PlayerController : MonoBehaviour
 {
     //定数
-    private const int COMMNUM = 4;
     private const KeyCode ExitKey = KeyCode.Escape;
     private const KeyCode DebugKey = KeyCode.B;
 
@@ -43,14 +43,13 @@ public class PlayerController : MonoBehaviour
     public List<KeyCode> left   = new List<KeyCode> { KeyCode.A,    KeyCode.LeftArrow   };
     public List<KeyCode> jump   = new List<KeyCode> { KeyCode.Space };
     public List<KeyCode> action = new List<KeyCode> { KeyCode.W     };
-           List<KeyCode> exit   = new List<KeyCode> { ExitKey       };
-           List<KeyCode> debug  = new List<KeyCode> { DebugKey      };
+    readonly List<KeyCode> exit   = new List<KeyCode> { KeyCode.Escape };
+    readonly List<KeyCode> debug  = new List<KeyCode> { KeyCode.B };
 
     //キャラクターのステート
     bool IsGondra    = false;
     bool IsGround    = false;
     bool IsLadder    = false;
-    bool IsCollision = false;
     bool[] PlayerInput = { false, };
 
     //コンポーネント置き場
@@ -90,20 +89,20 @@ public class PlayerController : MonoBehaviour
         InputCheck();
 
         //ゲームの終了
-        if(PlayerInput[(int)InputCommand.exit])
+        if(PlayerInput[(int)Commands.exit])
         {
             Quit();
         }
 
         //左右に動く
-        if (PlayerInput[(int)InputCommand.right] || PlayerInput[(int)InputCommand.left])
+        if (PlayerInput[(int)Commands.right] || PlayerInput[(int)Commands.left])
         {
-            Move(PlayerInput[(int)InputCommand.right] ? LR.right : LR.left);
+            Move(PlayerInput[(int)Commands.right] ? LR.right : LR.left);
             LRmoved = true;
         }
 
         //ジャンプする
-        if (PlayerInput[(int)InputCommand.jump])
+        if (PlayerInput[(int)Commands.jump])
         {
             rb.AddForce(new Vector3(0, JumpFouce));
         }
@@ -200,27 +199,31 @@ public class PlayerController : MonoBehaviour
     //入力の確認。不正なタイミングや不正な同時入力のコマンドを無視します。
     void InputCheck()
     {
-        bool[] state =
-            {
+        if (!Input.anyKey)
+        {
+            bool[] state =
+                {
             Std.CheckKeyList(right),
             Std.CheckKeyList(left),
             Std.CheckKeyList(jump),
             Std.CheckKeyList(action),
-            Std.CheckKeyList(new List<KeyCode>{ExitKey }),
+            Std.CheckKeyList(exit),
+            Std.CheckKeyList(debug)
         };
-        
-        if (IsGondra || (state[(int)InputCommand.right] && state[(int)InputCommand.left]))
-        {
-            state[(int)InputCommand.right] = false;
-            state[(int)InputCommand.left] = false;
-        }
-        if (state[(int)InputCommand.jump] && !IsCanJamp())
-        {
-            state[(int)InputCommand.jump] = false;
-        }
 
-        beforeInput = state;
-        PlayerInput = state;
+            if (IsGondra || (state[(int)Commands.right] && state[(int)Commands.left]))
+            {
+                state[(int)Commands.right] = false;
+                state[(int)Commands.left] = false;
+            }
+            if (state[(int)Commands.jump] && !IsCanJamp())
+            {
+                state[(int)Commands.jump] = false;
+            }
+
+            beforeInput = state;
+            PlayerInput = state;
+        }
     }
 
     //強制的にpositionを+addします
@@ -258,6 +261,7 @@ public class PlayerController : MonoBehaviour
         rb.useGravity = true;
     }
     
+    //リスポーン処理。最後に触れたSavePointの情報を用いて再誕します。
     public void Respawn()
     {
         from = SavePoint.p_cp;
@@ -266,6 +270,7 @@ public class PlayerController : MonoBehaviour
         Look(to);
     }
 
+    //ゲームをシャットダウンします。
     void Quit()
     {
 #if UNITY_EDITOR
