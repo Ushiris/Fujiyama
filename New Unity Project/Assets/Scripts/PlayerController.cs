@@ -24,6 +24,8 @@ public enum Commands
 
 public class PlayerController : MonoBehaviour
 {
+    #region variables
+
     //定数
     private const KeyCode ExitKey = KeyCode.Escape;
     private const KeyCode DebugKey = KeyCode.B;
@@ -68,6 +70,8 @@ public class PlayerController : MonoBehaviour
     CheckPoint def_t_CP;
     LR def_l;
 
+    #endregion
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -125,6 +129,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //プレイヤーキャラクターをInputLRに動かします
     private bool Move(LR InputLR)
     {
         //体の向きの変更
@@ -155,6 +160,15 @@ public class PlayerController : MonoBehaviour
         rb.velocity = new Vector3(x, y, z);
 
         return true;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        //落下判定を行う
+        if(other.tag=="LostZone")
+        {
+            Respawn();
+        }
     }
 
     //Collision判定（判定相手がisTriggerを持ってない場合に呼び出されます）
@@ -199,10 +213,8 @@ public class PlayerController : MonoBehaviour
     //入力の確認。不正なタイミングや不正な同時入力のコマンドを無視します。
     void InputCheck()
     {
-        if (!Input.anyKey)
-        {
-            bool[] state =
-                {
+        bool[] state =
+            {
             Std.CheckKeyList(right),
             Std.CheckKeyList(left),
             Std.CheckKeyList(jump),
@@ -211,19 +223,18 @@ public class PlayerController : MonoBehaviour
             Std.CheckKeyList(debug)
         };
 
-            if (IsGondra || (state[(int)Commands.right] && state[(int)Commands.left]))
-            {
-                state[(int)Commands.right] = false;
-                state[(int)Commands.left] = false;
-            }
-            if (state[(int)Commands.jump] && !IsCanJamp())
-            {
-                state[(int)Commands.jump] = false;
-            }
-
-            beforeInput = state;
-            PlayerInput = state;
+        if (IsGondra || (state[(int)Commands.right] && state[(int)Commands.left]))
+        {
+            state[(int)Commands.right] = false;
+            state[(int)Commands.left] = false;
         }
+        if (state[(int)Commands.jump] && !IsCanJamp())
+        {
+            state[(int)Commands.jump] = false;
+        }
+
+        beforeInput = state;
+        PlayerInput = state;
     }
 
     //強制的にpositionを+addします
@@ -232,17 +243,23 @@ public class PlayerController : MonoBehaviour
         transform.position += add;
     }
 
-    //地面との接触、離脱時に呼ぶ関数。
+    //地面との接触、離脱時に呼ぶ関数。IsGround=hitGになります。
     public void Ground(bool hitG)
     {
         IsGround = hitG;
         speed = hitG ? DefaultSpeed : (speed * 2 / 3);
     }
 
-    //ジャンプできるかどうかの判定
+    //ジャンプできるかどうかを調べます
     public bool IsCanJamp()
     {
         return !(IsLadder || !IsGround || IsGondra || rb.velocity.y > 3.5f);
+    }
+
+    //動くことが可能かどうかを判断します。
+    public bool IsMovable()
+    {
+        return !IsGondra;
     }
 
     //ゴンドラ乗車時の処理。プレイヤーの動きを静止させる。
@@ -264,6 +281,7 @@ public class PlayerController : MonoBehaviour
     //リスポーン処理。最後に触れたSavePointの情報を用いて再誕します。
     public void Respawn()
     {
+        transform.position = SavePoint.transform.position;
         from = SavePoint.p_cp;
         to = SavePoint.t_cp;
         looking = SavePoint.look;

@@ -9,6 +9,7 @@ TagManager:
   - Ladder
   - MoveStage
   - gondra
+  - LostZone
   layers:
   - Default
   - TransparentFX

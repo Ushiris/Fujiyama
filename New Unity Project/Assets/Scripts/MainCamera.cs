@@ -14,8 +14,7 @@ public class MainCamera : MonoBehaviour
     {
         playerController = player.GetComponent<PlayerController>();
     }
-
-    // Update is called once per frame
+    
     void LateUpdate()
     {
         //プレイヤーの方向と同一の方向を向き、補正をかけます。
