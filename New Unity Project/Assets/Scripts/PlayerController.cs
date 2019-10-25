@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 //見ている向き
 public enum LR
 {
@@ -19,6 +18,7 @@ public enum Commands
     action,
     exit,
     debug,
+    d_respawn,
     END,
 }
 
@@ -29,12 +29,13 @@ public class PlayerController : MonoBehaviour
     //定数
     private const KeyCode ExitKey = KeyCode.Escape;
     private const KeyCode DebugKey = KeyCode.B;
+    private const float JumpCoolTime = 0.3f;
 
     //動作のパラメータ
     public float speed;
     public float JumpFouce;
 
-    //初期設定
+    //初期設定が必要な変数
     public LR looking;
     public CheckPoint from;
     public CheckPoint to;
@@ -47,12 +48,15 @@ public class PlayerController : MonoBehaviour
     public List<KeyCode> action = new List<KeyCode> { KeyCode.W     };
     readonly List<KeyCode> exit   = new List<KeyCode> { KeyCode.Escape };
     readonly List<KeyCode> debug  = new List<KeyCode> { KeyCode.B };
+    readonly List<KeyCode> d_respawn = new List<KeyCode> { KeyCode.R };
 
     //キャラクターのステート
     bool IsGondra    = false;
     bool IsGround    = false;
     bool IsLadder    = false;
     bool[] PlayerInput = { false, };
+    bool IsJumping = false;
+    float JumpTimer = 0.3f;
 
     //コンポーネント置き場
     Rigidbody rb;
@@ -89,11 +93,21 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (IsJumping)
+        {
+            JumpTimer -= Time.deltaTime;
+            if (JumpTimer <= 0f)
+            {
+                IsJumping = false;
+                JumpTimer = JumpCoolTime;
+            }
+        }
+
         bool LRmoved = false;
         InputCheck();
 
         //ゲームの終了
-        if(PlayerInput[(int)Commands.exit])
+        if (PlayerInput[(int)Commands.exit])
         {
             Quit();
         }
@@ -109,6 +123,7 @@ public class PlayerController : MonoBehaviour
         if (PlayerInput[(int)Commands.jump])
         {
             rb.AddForce(new Vector3(0, JumpFouce));
+            IsJumping = true;
         }
 
         //左右の入力なしなら、左右の速度を減衰させる
@@ -127,6 +142,11 @@ public class PlayerController : MonoBehaviour
         {
             Reset();
         }
+
+        if (PlayerInput[(int)Commands.d_respawn])
+        {
+            Respawn();
+        }
     }
 
     //プレイヤーキャラクターをInputLRに動かします
@@ -142,15 +162,21 @@ public class PlayerController : MonoBehaviour
 
         //動作する向きの設定
         float x = 0, y, z = 0;
-        Vector3 moveArrow;
+        Vector3 moveArrow=Vector3.forward;
 
-        if (!IsLadder)
+        
+        
+        if (IsGround)
         {
             moveArrow = Vector3.forward;
         }
-        else
+        if (IsLadder && InputLR == LR.right)
         {
-            moveArrow = (InputLR == LR.right) ? Vector3.up : Vector3.down;
+            moveArrow = Vector3.up;
+        }
+        else if (IsLadder && InputLR == LR.left && !IsGround)
+        {
+            moveArrow = Vector3.down;
         }
 
         //動作する速度の設定
@@ -220,9 +246,16 @@ public class PlayerController : MonoBehaviour
             Std.CheckKeyList(jump),
             Std.CheckKeyList(action),
             Std.CheckKeyList(exit),
-            Std.CheckKeyList(debug)
+            Std.CheckKeyList(debug),
+            Std.CheckKeyList(d_respawn)
         };
 
+        if(!IsMovable())
+        {
+            state[(int)Commands.right] = false;
+            state[(int)Commands.left] = false;
+            state[(int)Commands.jump] = false;
+        }
         if (IsGondra || (state[(int)Commands.right] && state[(int)Commands.left]))
         {
             state[(int)Commands.right] = false;
@@ -253,7 +286,7 @@ public class PlayerController : MonoBehaviour
     //ジャンプできるかどうかを調べます
     public bool IsCanJamp()
     {
-        return !(IsLadder || !IsGround || IsGondra || rb.velocity.y > 3.5f);
+        return !(IsLadder || !IsGround || IsGondra || IsJumping || rb.velocity.y > 3.5f);
     }
 
     //動くことが可能かどうかを判断します。
@@ -296,6 +329,12 @@ public class PlayerController : MonoBehaviour
 #elif UNITY_STANDALONE
     UnityEngine.Application.Quit();
 #endif
+    }
+
+    //XZ平面におけるカメラのあるべき位置を返す関数
+    public Vector3 GetCameraPosXZ(Vector3 diff)
+    {
+        return transform.position + ((looking == LR.left) ? transform.right * diff.z : -transform.right * diff.z);
     }
 
     //debug code

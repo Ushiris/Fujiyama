@@ -8,21 +8,30 @@ public class MainCamera : MonoBehaviour
 {
     public GameObject player;
     PlayerController playerController;
-
-    public chaser pivot;
-    public Vector3 diff=new Vector3(0, 2, -4);
+    
+    public Vector3 diff = new Vector3(0, 0, 0);
+    Vector3 lookedPos;
 
     // Start is called before the first frame update
     void Start()
     {
         playerController = player.GetComponent<PlayerController>();
-        //プレイヤーと同一の座標へ向かい、そこから離れます。
-        transform.position = pivot.target.transform.position;
-        transform.Translate(diff, Space.Self);
+        
+        Vector3 toNext = playerController.GetCameraPosXZ(diff);
+        toNext.y += diff.y;
+        transform.position = toNext;
+
+        transform.LookAt(player.transform);
     }
     
     void LateUpdate()
     {
-        transform.LookAt(pivot.target.transform);
+        Vector3 toNext = playerController.GetCameraPosXZ(diff);
+        toNext.y += diff.y;
+        Vector3 toNextDiff= Vector3.Lerp(transform.position, toNext, Time.deltaTime * 2f);
+        transform.position = toNextDiff;
+        transform.position = new Vector3(transform.position.x, toNext.y, transform.position.z);
+        
+        transform.LookAt(player.transform.position);
     }
 }

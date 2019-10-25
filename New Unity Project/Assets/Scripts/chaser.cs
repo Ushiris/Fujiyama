@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class chaser : MonoBehaviour
 {
-    public GameObject target;
+    public PlayerController target;
 
     // Start is called before the first frame update
     void Start()
