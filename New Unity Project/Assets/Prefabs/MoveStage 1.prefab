@@ -244,7 +244,7 @@ GameObject:
   - component: {fileID: 7480189120413740306}
   m_Layer: 0
   m_Name: MoveStage 1
-  m_TagString: Plane
+  m_TagString: MoveStage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -317,11 +317,6 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Plane
       objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: be3f377adce839940b6a3a1d141e6538,
-        type: 3}
-      propertyPath: m_Name
-      value: floor3
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: be3f377adce839940b6a3a1d141e6538,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -376,6 +371,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: be3f377adce839940b6a3a1d141e6538,
+        type: 3}
+      propertyPath: m_Name
+      value: floor3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: be3f377adce839940b6a3a1d141e6538, type: 3}

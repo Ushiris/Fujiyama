@@ -8,7 +8,6 @@ public class PathFinder : MonoBehaviour
 {
     CheckPoint path;
     PlayerController player;
-    chaser pl_chaser;
     bool isHit = false;
 
     // Start is called before the first frame update

@@ -11,9 +11,11 @@ GameObject:
   - component: {fileID: 4832504602449677180}
   - component: {fileID: 4488830893145403722}
   - component: {fileID: 7887789221026516403}
+  - component: {fileID: 1950944896573837818}
+  - component: {fileID: -1444900708720811735}
   m_Layer: 0
   m_Name: object 1
-  m_TagString: Untagged
+  m_TagString: MemoryFragment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -82,3 +84,28 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &1950944896573837818
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8452087229616159087}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.6, y: 1.616754, z: 0.7169242}
+  m_Center: {x: -0.3, y: 0, z: 0}
+--- !u!114 &-1444900708720811735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8452087229616159087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6940ce79f5b93c64cb6dbab7226bd2e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

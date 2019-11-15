@@ -10,6 +10,7 @@ TagManager:
   - MoveStage
   - gondra
   - LostZone
+  - MemoryFragment
   layers:
   - Default
   - TransparentFX

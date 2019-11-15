@@ -25,7 +25,6 @@ public enum Commands
 public class PlayerController : MonoBehaviour
 {
     #region variables
-
     //定数
     private const KeyCode ExitKey = KeyCode.Escape;
     private const KeyCode DebugKey = KeyCode.B;
@@ -40,6 +39,7 @@ public class PlayerController : MonoBehaviour
     public CheckPoint from;
     public CheckPoint to;
     public SaveManager SavePoint;
+    public Animator anim;
 
     //入力の設定
     public List<KeyCode> right  = new List<KeyCode> { KeyCode.D,    KeyCode.RightArrow  };
@@ -56,15 +56,16 @@ public class PlayerController : MonoBehaviour
     bool IsLadder    = false;
     bool[] PlayerInput = { false, };
     bool IsJumping = false;
+    bool LRmoved = false;
     float JumpTimer = 0.3f;
 
     //コンポーネント置き場
     Rigidbody rb;
 
-    //変数の初期値
+    //リセットされる可能性がある変数の初期値
     float DefaultSpeed;
 
-    //前フレームの状態の保存
+    //前フレームの入力状態の保存
     bool[] beforeInput = { false };
 
     //debug
@@ -73,7 +74,6 @@ public class PlayerController : MonoBehaviour
     CheckPoint def_f_CP;
     CheckPoint def_t_CP;
     LR def_l;
-
     #endregion
     
     // Start is called before the first frame update
@@ -88,11 +88,13 @@ public class PlayerController : MonoBehaviour
         def_t_CP = to;
         def_l = looking;
         InputCheck();
+        SetAnimStates(true);
     }
 
     // Update is called once per frame
     void Update()
     {
+        //ジャンプのクールタイム処理
         if (IsJumping)
         {
             JumpTimer -= Time.deltaTime;
@@ -103,7 +105,9 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        bool LRmoved = false;
+        LRmoved = false;
+
+        //プレイヤーからの入力を受け取る
         InputCheck();
 
         //ゲームの終了
@@ -122,8 +126,8 @@ public class PlayerController : MonoBehaviour
         //ジャンプする
         if (PlayerInput[(int)Commands.jump])
         {
-            rb.AddForce(new Vector3(0, JumpFouce));
             IsJumping = true;
+            Invoke("Jump", 0.23f);
         }
 
         //左右の入力なしなら、左右の速度を減衰させる
@@ -137,19 +141,21 @@ public class PlayerController : MonoBehaviour
         //回転力の消去
         rb.angularVelocity = Vector3.zero;
 
+        //アニメーションにプレイヤーの状態を送信
+        SetAnimStates();
+
         //debug code
         if (Input.GetKeyDown(DebugKey))
         {
             Reset();
         }
-
         if (PlayerInput[(int)Commands.d_respawn])
         {
             Respawn();
         }
     }
 
-    //プレイヤーキャラクターをInputLRに動かします
+    //プレイヤーキャラクターをInputLRに動かします。
     private bool Move(LR InputLR)
     {
         //体の向きの変更
@@ -163,8 +169,6 @@ public class PlayerController : MonoBehaviour
         //動作する向きの設定
         float x = 0, y, z = 0;
         Vector3 moveArrow=Vector3.forward;
-
-        
         
         if (IsGround)
         {
@@ -196,8 +200,7 @@ public class PlayerController : MonoBehaviour
             Respawn();
         }
     }
-
-    //Collision判定（判定相手がisTriggerを持ってない場合に呼び出されます）
+    
     private void OnCollisionEnter(Collision collision)
     {
         //はしごに足をかけ始めたどうかの判定
@@ -283,7 +286,7 @@ public class PlayerController : MonoBehaviour
         speed = hitG ? DefaultSpeed : (speed * 2 / 3);
     }
 
-    //ジャンプできるかどうかを調べます
+    //ジャンプできるかどうかを調べます。
     public bool IsCanJamp()
     {
         return !(IsLadder || !IsGround || IsGondra || IsJumping || rb.velocity.y > 3.5f);
@@ -331,10 +334,25 @@ public class PlayerController : MonoBehaviour
 #endif
     }
 
-    //XZ平面におけるカメラのあるべき位置を返す関数
+    //XZ平面におけるカメラのあるべき位置を返す関数。
     public Vector3 GetCameraPosXZ(Vector3 diff)
     {
         return transform.position + ((looking == LR.left) ? transform.right * diff.z : -transform.right * diff.z);
+    }
+
+    //アニメーションへ状態を送信するメソッド。
+    private void SetAnimStates(bool reset = false)
+    {
+        anim.SetBool("isRunning", LRmoved && !reset);
+        anim.SetBool("isJumping", IsJumping || !IsGround && !reset);
+        anim.SetBool("isLadder", IsLadder && !reset);
+        anim.SetBool("isUp", rb.velocity.y > 0 && !reset);
+    }
+
+    //跳びます。
+    private void Jump()
+    {
+        rb.AddForce(new Vector3(0, JumpFouce));
     }
 
     //debug code
