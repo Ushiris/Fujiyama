@@ -42,21 +42,22 @@ public class PlayerController : MonoBehaviour
     public Animator anim;
 
     //入力の設定
-    public List<KeyCode> right  = new List<KeyCode> { KeyCode.D,    KeyCode.RightArrow  };
-    public List<KeyCode> left   = new List<KeyCode> { KeyCode.A,    KeyCode.LeftArrow   };
-    public List<KeyCode> jump   = new List<KeyCode> { KeyCode.Space };
-    public List<KeyCode> action = new List<KeyCode> { KeyCode.W     };
-    readonly List<KeyCode> exit   = new List<KeyCode> { KeyCode.Escape };
-    readonly List<KeyCode> debug  = new List<KeyCode> { KeyCode.B };
+    public List<KeyCode> right = new List<KeyCode> { KeyCode.D, KeyCode.RightArrow };
+    public List<KeyCode> left = new List<KeyCode> { KeyCode.A, KeyCode.LeftArrow };
+    public List<KeyCode> jump = new List<KeyCode> { KeyCode.Space };
+    public List<KeyCode> action = new List<KeyCode> { KeyCode.W };
+    readonly List<KeyCode> exit = new List<KeyCode> { KeyCode.Escape };
+    readonly List<KeyCode> debug = new List<KeyCode> { KeyCode.B };
     readonly List<KeyCode> d_respawn = new List<KeyCode> { KeyCode.R };
 
     //キャラクターのステート
-    bool IsGondra    = false;
-    bool IsGround    = false;
-    bool IsLadder    = false;
+    bool IsGondra = false;
+    bool IsGround = false;
+    bool IsLadder = false;
     bool[] PlayerInput = { false, };
     bool IsJumping = false;
     bool LRmoved = false;
+    bool isActionable = false;
     float JumpTimer = 0.3f;
 
     //コンポーネント置き場
@@ -67,6 +68,10 @@ public class PlayerController : MonoBehaviour
 
     //前フレームの入力状態の保存
     bool[] beforeInput = { false };
+
+    //アクションボタンで続行されるアクション
+    public delegate void Action();
+    public Action EventEffect;
 
     //debug
     Vector3 def_p;
