@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 49298568133679420}
   m_Layer: 0
   m_Name: CP_next
-  m_TagString: Untagged
+  m_TagString: CheckPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -74,7 +74,7 @@ GameObject:
   - component: {fileID: 1139444238045111501}
   m_Layer: 0
   m_Name: CP_prev
-  m_TagString: Untagged
+  m_TagString: CheckPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

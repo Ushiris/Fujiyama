@@ -33,14 +33,17 @@ public class MoveRepeatorCircle : MonoBehaviour
             progress += speed / 100;
             Vector3 from = isDefPos ? DefaultPosition : to;
             Vector3 target= isDefPos ? to : DefaultPosition;
-            Vector3.Slerp(from, target, progress);
+            Vector3 next = Vector3.Slerp(from, target, progress);
+            transform.position = next;
             transform.LookAt(center);
+            transform.Rotate(new Vector3(0, 1, 0), 90f);
             player.ForceMove(transform.position - before);
 
             if(progress>=1f)
             {
                 isActive = false;
                 isActionable = true;
+                isDefPos = !isDefPos;
                 progress = 0f;
             }
         }
@@ -53,7 +56,8 @@ public class MoveRepeatorCircle : MonoBehaviour
         if(collision.gameObject.tag=="Player")
         {
             player = collision.gameObject.GetComponent<PlayerController>();
-            isRide = true;
+            player.isActionable = true;
+            player.EventEffect = Action;
         }
         
     }
@@ -62,8 +66,7 @@ public class MoveRepeatorCircle : MonoBehaviour
     {
         if(collision.gameObject.tag=="Player")
         {
-            isRide = false;
-            player.EventEffect = Action;
+            player.isActionable = false;
         }
     }
 

@@ -57,7 +57,7 @@ public class PlayerController : MonoBehaviour
     bool[] PlayerInput = { false, };
     bool IsJumping = false;
     bool LRmoved = false;
-    bool isActionable = false;
+    public bool isActionable = false;
     float JumpTimer = 0.3f;
 
     //コンポーネント置き場
@@ -119,6 +119,11 @@ public class PlayerController : MonoBehaviour
         if (PlayerInput[(int)Commands.exit])
         {
             Quit();
+        }
+
+        if (PlayerInput[(int)Commands.action])
+        {
+            EventEffect();
         }
 
         //左右に動く
@@ -272,6 +277,10 @@ public class PlayerController : MonoBehaviour
         if (state[(int)Commands.jump] && !IsCanJamp())
         {
             state[(int)Commands.jump] = false;
+        }
+        if(!isActionable)
+        {
+            state[(int)Commands.action] = false;
         }
 
         beforeInput = state;
