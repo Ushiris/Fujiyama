@@ -3,25 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public enum SceneName
-{
-    title,
-    select,
-    stageA,
-    stageB,
-    result
-};
-
 
 public class GameDirector : MonoBehaviour
 {
-    public static string
-        title,
-        select,
-        stageA,
-        stageB,
-        result;
-
     public static PlayDataDirector PlayData;
 
     private void Start()
@@ -29,36 +13,19 @@ public class GameDirector : MonoBehaviour
         DontDestroyOnLoad(this);
     }
 
-    public void OpenScene(SceneName scene)
+    public void OpenScene(string SceneName)
     {
-        string name;
-        switch (scene)
-        {
-            case SceneName.title:
-                name = title;
-                break;
-            case SceneName.select:
-                name = select;
-                break;
-            case SceneName.stageA:
-                name = stageA;
-                break;
-            case SceneName.stageB:
-                name = stageB;
-                break;
-            case SceneName.result:
-                name = result;
-                break;
-            default:
-                name = title;
-                break;
-        }
-
-        SceneManager.LoadScene(name);
+        SceneManager.LoadScene(SceneName);
     }
 
+    //ゲームをシャットダウンします。
     public void ShatDown()
     {
-
+        PlayData.PlayEnd();
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#elif UNITY_STANDALONE
+    UnityEngine.Application.Quit();
+#endif
     }
 }

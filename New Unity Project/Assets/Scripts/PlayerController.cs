@@ -40,13 +40,14 @@ public class PlayerController : MonoBehaviour
     public CheckPoint to;
     public SaveManager SavePoint;
     public Animator anim;
+    public GameDirector director;
 
     //入力の設定
     public List<KeyCode> right = new List<KeyCode> { KeyCode.D, KeyCode.RightArrow };
     public List<KeyCode> left = new List<KeyCode> { KeyCode.A, KeyCode.LeftArrow };
     public List<KeyCode> jump = new List<KeyCode> { KeyCode.Space };
     public List<KeyCode> action = new List<KeyCode> { KeyCode.W };
-    readonly List<KeyCode> exit = new List<KeyCode> { KeyCode.Escape };
+    public List<KeyCode> exit = new List<KeyCode> { KeyCode.Escape };
     readonly List<KeyCode> debug = new List<KeyCode> { KeyCode.B };
     readonly List<KeyCode> d_respawn = new List<KeyCode> { KeyCode.R };
 
@@ -118,7 +119,7 @@ public class PlayerController : MonoBehaviour
         //ゲームの終了
         if (PlayerInput[(int)Commands.exit])
         {
-            Quit();
+            director.ShatDown();
         }
 
         if (PlayerInput[(int)Commands.action])
@@ -336,16 +337,6 @@ public class PlayerController : MonoBehaviour
         to = SavePoint.t_cp;
         looking = SavePoint.look;
         Look(to);
-    }
-
-    //ゲームをシャットダウンします。
-    void Quit()
-    {
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#elif UNITY_STANDALONE
-    UnityEngine.Application.Quit();
-#endif
     }
 
     //XZ平面におけるカメラのあるべき位置を返す関数。
