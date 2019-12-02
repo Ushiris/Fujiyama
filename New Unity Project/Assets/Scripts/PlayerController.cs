@@ -40,7 +40,6 @@ public class PlayerController : MonoBehaviour
     public CheckPoint to;
     public SaveManager SavePoint;
     public Animator anim;
-    public GameDirector director;
 
     //入力の設定
     public List<KeyCode> right = new List<KeyCode> { KeyCode.D, KeyCode.RightArrow };
@@ -55,8 +54,8 @@ public class PlayerController : MonoBehaviour
     bool IsGondra = false;
     bool IsGround = false;
     bool IsLadder = false;
-    bool[] PlayerInput = { false, };
     bool IsJumping = false;
+    bool[] PlayerInput = { false, };
     bool LRmoved = false;
     public bool isActionable = false;
     float JumpTimer = 0.3f;
@@ -119,7 +118,7 @@ public class PlayerController : MonoBehaviour
         //ゲームの終了
         if (PlayerInput[(int)Commands.exit])
         {
-            director.ShatDown();
+            GameDirector.ShatDown();
         }
 
         if (PlayerInput[(int)Commands.action])
@@ -158,7 +157,7 @@ public class PlayerController : MonoBehaviour
         //debug code
         if (Input.GetKeyDown(DebugKey))
         {
-            Reset();
+            DebugReset();
         }
         if (PlayerInput[(int)Commands.d_respawn])
         {
@@ -361,7 +360,7 @@ public class PlayerController : MonoBehaviour
     }
 
     //debug code
-    private void Reset()
+    private void DebugReset()
     {
         transform.SetPositionAndRotation(def_p, def_q);
         from = def_f_CP;

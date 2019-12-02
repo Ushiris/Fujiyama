@@ -23,6 +23,7 @@ public class MoveRepeatorCircle : MonoBehaviour
     {
         before = transform.position;
         DefaultPosition = transform.position;
+        to += new Vector3(1.229489f, 0.5924178f, 1.54f);
     }
 
     // Update is called once per frame
@@ -35,6 +36,7 @@ public class MoveRepeatorCircle : MonoBehaviour
             Vector3 target= isDefPos ? to : DefaultPosition;
             Vector3 next = Vector3.Slerp(from, target, progress);
             transform.position = next;
+            center.y = transform.position.y;
             transform.LookAt(center);
             transform.Rotate(new Vector3(0, 1, 0), 90f);
             player.ForceMove(transform.position - before);

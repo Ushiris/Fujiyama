@@ -10,16 +10,29 @@ public class GameDirector : MonoBehaviour
 
     private void Start()
     {
-        DontDestroyOnLoad(this);
+        PlayData.PlayStart();
     }
 
-    public void OpenScene(string SceneName)
+    public void OnClickOpenScene(string SceneName)
+    {
+        SceneManager.LoadScene(SceneName);
+    }
+    public static void OpenScene(string SceneName)
     {
         SceneManager.LoadScene(SceneName);
     }
 
     //ゲームをシャットダウンします。
-    public void ShatDown()
+    public void OnclickShatDown()
+    {
+        PlayData.PlayEnd();
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#elif UNITY_STANDALONE
+    UnityEngine.Application.Quit();
+#endif
+    }
+    public static void ShatDown()
     {
         PlayData.PlayEnd();
 #if UNITY_EDITOR

@@ -19,6 +19,8 @@ public class PlayDataDirector : MonoBehaviour
 {
     public int player_id = 0;
     private string file_dir = Application.dataPath + "/PlayData/" + System.DateTime.Now + ".csv";
+    const int STAGE_A_SECTION_COUNT = 12;
+    const int STAGE_B_SECTION_COUNT = 12;
 
     bool isClearStageA = false;
     bool isClearStageB = false;
@@ -28,27 +30,26 @@ public class PlayDataDirector : MonoBehaviour
     float BreakTime = 0f;
     int LostCount = 0;
 
-    List<float> SectionClearTimes;
-    List<float> SectionBreakTimes;
-    List<int> SectionLostCounts;
+    List<float?> SectionClearTimes = new List<float?>(STAGE_A_SECTION_COUNT);
+    List<float?> SectionBreakTimes = new List<float?>(STAGE_B_SECTION_COUNT);
+    List<int?> SectionLostCounts = new List<int?>(STAGE_A_SECTION_COUNT + STAGE_B_SECTION_COUNT);
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        
+        SectionClearTimes.ForEach(n => n = null);
+        SectionBreakTimes.ForEach(n => n = null);
+        SectionLostCounts.ForEach(n => n = null);
     }
 
     // Update is called once per frame
     void Update()
     {
         AppRunningTime += Time.deltaTime;
-
-
     }
 
     public void PlayEnd()
     {
-        //ログデータリストへの最終書き出し
+        //セクションの途中でやめた場合の処理
 
 
         //リセット処理

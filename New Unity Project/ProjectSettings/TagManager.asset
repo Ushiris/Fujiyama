@@ -11,6 +11,7 @@ TagManager:
   - gondra
   - LostZone
   - MemoryFragment
+  - Makaron
   layers:
   - Default
   - TransparentFX
