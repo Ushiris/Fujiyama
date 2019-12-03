@@ -11,6 +11,7 @@ public class MainCamera : MonoBehaviour
     
     public Vector3 diff = new Vector3(0, 0, 0);
     Vector3 lookedPos;
+    float ave_time = 1 / 60;
 
     // Start is called before the first frame update
     void Start()
@@ -26,9 +27,10 @@ public class MainCamera : MonoBehaviour
     
     void LateUpdate()
     {
+        ave_time = ave_time + Time.deltaTime / 2;
         Vector3 toNext = playerController.GetCameraPosXZ(diff);
         toNext.y += diff.y;
-        Vector3 toNextDiff= Vector3.Lerp(transform.position, toNext, Time.deltaTime * 2f);
+        Vector3 toNextDiff= Vector3.Lerp(transform.position, toNext, Time.deltaTime);
         transform.position = toNextDiff;
         transform.position = new Vector3(transform.position.x, toNext.y, transform.position.z);
         

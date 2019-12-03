@@ -10,7 +10,16 @@ public class GameDirector : MonoBehaviour
 
     private void Start()
     {
-        PlayData.PlayStart();
+        //PlayData = gameObject.AddComponent<PlayDataDirector>();
+        //PlayData.PlayStart();
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.C))
+        {
+            OpenScene("StageB");
+        }
     }
 
     public void OnClickOpenScene(string SceneName)
@@ -25,7 +34,7 @@ public class GameDirector : MonoBehaviour
     //ゲームをシャットダウンします。
     public void OnclickShatDown()
     {
-        PlayData.PlayEnd();
+        //PlayData.PlayEnd();
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #elif UNITY_STANDALONE
@@ -34,7 +43,7 @@ public class GameDirector : MonoBehaviour
     }
     public static void ShatDown()
     {
-        PlayData.PlayEnd();
+        //PlayData.PlayEnd();
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #elif UNITY_STANDALONE

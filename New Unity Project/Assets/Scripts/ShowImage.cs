@@ -22,13 +22,18 @@ public class ShowImage : MonoBehaviour
         if (isFade)
         {
             timer += Time.deltaTime;
-            if (timer >= 1f)
+            if(timer<1f)
             {
-                frame.color = new Color(1f, 1f, 1f, 1 - (timer - 1f) / 2);
+                frame.color = new Color(1f, 1f, 1f, timer);
             }
-            if (timer >= 4f)
+            if (timer >= 2f)
+            {
+                frame.color = new Color(1f, 1f, 1f, 1 - (timer - 2f) / 2);
+            }
+            if (timer >= 6f)
             {
                 timer = 0f;
+                Destroy(gameObject);
                 isFade = false;
             }
         }
@@ -39,7 +44,7 @@ public class ShowImage : MonoBehaviour
         if(other.tag=="Player")
         {
             frame.sprite = image;
-            frame.color = new Color(1f,1f,1f,1f);
+            frame.color = new Color(1f,1f,1f,0f);
             isFade = true;
         }
     }

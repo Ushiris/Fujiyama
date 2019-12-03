@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour
     public CheckPoint to;
     public SaveManager SavePoint;
     public Animator anim;
+    public AudioClip jumpSE;
 
     //入力の設定
     public List<KeyCode> right = new List<KeyCode> { KeyCode.D, KeyCode.RightArrow };
@@ -59,9 +60,11 @@ public class PlayerController : MonoBehaviour
     bool LRmoved = false;
     public bool isActionable = false;
     float JumpTimer = 0.3f;
+    bool IsPause { get; set; }
 
     //コンポーネント置き場
     Rigidbody rb;
+    AudioSource A_source;
 
     //リセットされる可能性がある変数の初期値
     float DefaultSpeed;
@@ -86,6 +89,7 @@ public class PlayerController : MonoBehaviour
     {
         DefaultSpeed = speed;
         rb = gameObject.GetComponent<Rigidbody>();
+        A_source = gameObject.GetComponent<AudioSource>();
         Look(to);
         def_p = transform.position;
         def_q = transform.rotation;
@@ -209,6 +213,18 @@ public class PlayerController : MonoBehaviour
         {
             Respawn();
         }
+
+        if(other.tag=="MemoryFragment")
+        {
+            IsPause = true;
+            rb.velocity = Vector3.zero;
+            Invoke("Resume", 6.1f);
+        }
+    }
+
+    private void Resume()
+    {
+        IsPause = false;
     }
     
     private void OnCollisionEnter(Collision collision)
@@ -254,16 +270,16 @@ public class PlayerController : MonoBehaviour
     {
         bool[] state =
             {
-            Std.CheckKeyList(right),
-            Std.CheckKeyList(left),
-            Std.CheckKeyList(jump),
-            Std.CheckKeyList(action),
-            Std.CheckKeyList(exit),
-            Std.CheckKeyList(debug),
-            Std.CheckKeyList(d_respawn)
+            IsPause? false:Std.CheckKeyList(right),
+            IsPause? false:Std.CheckKeyList(left),
+            IsPause? false:Std.CheckKeyList(jump),
+            IsPause? false:Std.CheckKeyList(action),
+            IsPause? false:Std.CheckKeyList(exit),
+            IsPause? false:Std.CheckKeyList(debug),
+            IsPause? false:Std.CheckKeyList(d_respawn)
         };
 
-        if(!IsMovable())
+        if (!IsMovable())
         {
             state[(int)Commands.right] = false;
             state[(int)Commands.left] = false;
@@ -278,7 +294,7 @@ public class PlayerController : MonoBehaviour
         {
             state[(int)Commands.jump] = false;
         }
-        if(!isActionable)
+        if (!isActionable)
         {
             state[(int)Commands.action] = false;
         }
@@ -351,12 +367,14 @@ public class PlayerController : MonoBehaviour
         anim.SetBool("isJumping", IsJumping || !IsGround && !reset);
         anim.SetBool("isLadder", IsLadder && !reset);
         anim.SetBool("isUp", rb.velocity.y > 0 && !reset);
+        anim.SetBool("Gondra", IsGondra && !reset);
     }
 
     //跳びます。
     private void Jump()
     {
         rb.AddForce(new Vector3(0, JumpFouce));
+        A_source.PlayOneShot(jumpSE);
     }
 
     //debug code
