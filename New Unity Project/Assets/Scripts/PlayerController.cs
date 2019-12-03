@@ -114,6 +114,11 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        if (Mathf.Abs(rb.velocity.y) > 0.05f)
+        {
+            IsJumping = true;
+        }
+
         LRmoved = false;
 
         //プレイヤーからの入力を受け取る
@@ -182,8 +187,8 @@ public class PlayerController : MonoBehaviour
 
         //動作する向きの設定
         float x = 0, y, z = 0;
-        Vector3 moveArrow=Vector3.forward;
-        
+        Vector3 moveArrow = Vector3.forward;
+
         if (IsGround)
         {
             moveArrow = Vector3.forward;
@@ -313,7 +318,6 @@ public class PlayerController : MonoBehaviour
     public void Ground(bool hitG)
     {
         IsGround = hitG;
-        speed = hitG ? DefaultSpeed : (speed * 2 / 3);
     }
 
     //ジャンプできるかどうかを調べます。
@@ -364,7 +368,7 @@ public class PlayerController : MonoBehaviour
     private void SetAnimStates(bool reset = false)
     {
         anim.SetBool("isRunning", LRmoved && !reset);
-        anim.SetBool("isJumping", IsJumping || !IsGround && !reset);
+        anim.SetBool("isJumping", IsJumping && !IsGround && !reset);
         anim.SetBool("isLadder", IsLadder && !reset);
         anim.SetBool("isUp", rb.velocity.y > 0 && !reset);
         anim.SetBool("Gondra", IsGondra && !reset);

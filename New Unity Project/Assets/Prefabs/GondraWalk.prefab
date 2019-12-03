@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3588324746606953447}
   m_Layer: 0
   m_Name: GondraWalk
-  m_TagString: gondra
+  m_TagString: Plane
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -78,7 +78,7 @@ GameObject:
   - component: {fileID: 2401031585511079676}
   m_Layer: 0
   m_Name: floor2 (Missing Prefab)
-  m_TagString: Untagged
+  m_TagString: Plane
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -175,7 +175,7 @@ GameObject:
   - component: {fileID: 972486308480729863}
   m_Layer: 0
   m_Name: seat
-  m_TagString: gondra
+  m_TagString: Plane
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -275,7 +275,7 @@ GameObject:
   - component: {fileID: 8920300183379758186}
   m_Layer: 0
   m_Name: Missing Prefab (Dummy)
-  m_TagString: Untagged
+  m_TagString: Plane
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -309,7 +309,7 @@ GameObject:
   - component: {fileID: 2024189974749531568}
   m_Layer: 0
   m_Name: Missing Prefab (Dummy)
-  m_TagString: Untagged
+  m_TagString: Plane
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -443,20 +443,9 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: d14880a780e6579498d6f1fb83206175,
-        type: 3}
-      propertyPath: m_Name
-      value: floor2
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: d14880a780e6579498d6f1fb83206175,
-        type: 3}
+    - target: {fileID: 0}
       propertyPath: m_TagString
       value: Plane
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: d14880a780e6579498d6f1fb83206175,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: d14880a780e6579498d6f1fb83206175,
         type: 3}
@@ -512,6 +501,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: d14880a780e6579498d6f1fb83206175,
+        type: 3}
+      propertyPath: m_Name
+      value: floor2
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: d14880a780e6579498d6f1fb83206175,
+        type: 3}
+      propertyPath: m_TagString
+      value: Plane
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: d14880a780e6579498d6f1fb83206175,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d14880a780e6579498d6f1fb83206175, type: 3}

@@ -57,7 +57,7 @@ public class gondra : MonoBehaviour
     public void GetOn()
     {
         IsJoinPL = true;
-        player.GondraEnter();
+        if(gameObject.tag!="Plane") player.GondraEnter();
     }
 
     public void GetOff()

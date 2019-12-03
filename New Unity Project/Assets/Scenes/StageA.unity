@@ -889,6 +889,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: GondraWalk
       objectReference: {fileID: 0}
+    - target: {fileID: 2430712586046651014, guid: b3790e3405f8ff14292964d8d41fad94,
+        type: 3}
+      propertyPath: m_TagString
+      value: Plane
+      objectReference: {fileID: 0}
     - target: {fileID: 6427226454216979595, guid: b3790e3405f8ff14292964d8d41fad94,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -968,6 +973,11 @@ PrefabInstance:
         type: 3}
       propertyPath: speed
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4092412238999645293, guid: b3790e3405f8ff14292964d8d41fad94,
+        type: 3}
+      propertyPath: m_TagString
+      value: Plane
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b3790e3405f8ff14292964d8d41fad94, type: 3}
@@ -3171,6 +3181,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: GondraWalk
       objectReference: {fileID: 0}
+    - target: {fileID: 2430712586046651014, guid: b3790e3405f8ff14292964d8d41fad94,
+        type: 3}
+      propertyPath: m_TagString
+      value: Plane
+      objectReference: {fileID: 0}
     - target: {fileID: 6427226454216979595, guid: b3790e3405f8ff14292964d8d41fad94,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3245,6 +3260,11 @@ PrefabInstance:
         type: 3}
       propertyPath: to.z
       value: -70
+      objectReference: {fileID: 0}
+    - target: {fileID: 4092412238999645293, guid: b3790e3405f8ff14292964d8d41fad94,
+        type: 3}
+      propertyPath: m_TagString
+      value: Plane
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b3790e3405f8ff14292964d8d41fad94, type: 3}
@@ -5197,6 +5217,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: GondraWalk
       objectReference: {fileID: 0}
+    - target: {fileID: 2430712586046651014, guid: b3790e3405f8ff14292964d8d41fad94,
+        type: 3}
+      propertyPath: m_TagString
+      value: Plane
+      objectReference: {fileID: 0}
     - target: {fileID: 6427226454216979595, guid: b3790e3405f8ff14292964d8d41fad94,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5280,7 +5305,12 @@ PrefabInstance:
     - target: {fileID: 2445770038455365946, guid: b3790e3405f8ff14292964d8d41fad94,
         type: 3}
       propertyPath: m_TagString
-      value: gondra
+      value: Plane
+      objectReference: {fileID: 0}
+    - target: {fileID: 4092412238999645293, guid: b3790e3405f8ff14292964d8d41fad94,
+        type: 3}
+      propertyPath: m_TagString
+      value: Plane
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b3790e3405f8ff14292964d8d41fad94, type: 3}
