@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
     //定数
     private const KeyCode ExitKey = KeyCode.Escape;
     private const KeyCode DebugKey = KeyCode.B;
-    private const float JumpCoolTime = 0.3f;
+    private const float JumpCoolTime = 0.8f;
 
     //動作のパラメータ
     public float speed;
@@ -58,9 +58,11 @@ public class PlayerController : MonoBehaviour
     bool IsJumping = false;
     bool[] PlayerInput = { false, };
     bool LRmoved = false;
+    bool IsRiding = false;
     public bool isActionable = false;
-    float JumpTimer = 0.3f;
+    float JumpTimer = 0.8f;
     bool IsPause { get; set; }
+    private bool AcceptJump { get; set; }
 
     //コンポーネント置き場
     Rigidbody rb;
@@ -98,6 +100,7 @@ public class PlayerController : MonoBehaviour
         def_l = looking;
         InputCheck();
         SetAnimStates(true);
+        AcceptJump = true;
     }
 
     // Update is called once per frame
@@ -107,16 +110,12 @@ public class PlayerController : MonoBehaviour
         if (IsJumping)
         {
             JumpTimer -= Time.deltaTime;
-            if (JumpTimer <= 0f)
+            if (JumpTimer <= 0f && Mathf.Abs(rb.velocity.y) < 0.2f)
             {
                 IsJumping = false;
+                Invoke("JumpOK", 0.2f);
                 JumpTimer = JumpCoolTime;
             }
-        }
-
-        if (Mathf.Abs(rb.velocity.y) > 0.05f)
-        {
-            IsJumping = true;
         }
 
         LRmoved = false;
@@ -146,7 +145,8 @@ public class PlayerController : MonoBehaviour
         if (PlayerInput[(int)Commands.jump])
         {
             IsJumping = true;
-            Invoke("Jump", 0.23f);
+            AcceptJump = false;
+            Jump();
         }
 
         //左右の入力なしなら、左右の速度を減衰させる
@@ -273,15 +273,25 @@ public class PlayerController : MonoBehaviour
     //入力の確認。不正なタイミングや不正な同時入力のコマンドを無視します。
     void InputCheck()
     {
+        if(IsPause)
+        {
+            for(int i=0;i< PlayerInput.Length;i++)
+            {
+                PlayerInput[i] = false;
+            }
+            return;
+        }
+
+
         bool[] state =
             {
-            IsPause? false:Std.CheckKeyList(right),
-            IsPause? false:Std.CheckKeyList(left),
-            IsPause? false:Std.CheckKeyList(jump),
-            IsPause? false:Std.CheckKeyList(action),
-            IsPause? false:Std.CheckKeyList(exit),
-            IsPause? false:Std.CheckKeyList(debug),
-            IsPause? false:Std.CheckKeyList(d_respawn)
+            Std.CheckKeyList(right),
+            Std.CheckKeyList(left),
+            Std.CheckKeyList(jump),
+            Std.CheckKeyList(action),
+            Std.CheckKeyList(exit),
+            Std.CheckKeyList(debug),
+            Std.CheckKeyList(d_respawn)
         };
 
         if (!IsMovable())
@@ -295,7 +305,7 @@ public class PlayerController : MonoBehaviour
             state[(int)Commands.right] = false;
             state[(int)Commands.left] = false;
         }
-        if (state[(int)Commands.jump] && !IsCanJamp())
+        if (state[(int)Commands.jump] && !IsCanJamp() && !AcceptJump)
         {
             state[(int)Commands.jump] = false;
         }
@@ -317,13 +327,13 @@ public class PlayerController : MonoBehaviour
     //地面との接触、離脱時に呼ぶ関数。IsGround=hitGになります。
     public void Ground(bool hitG)
     {
-        IsGround = hitG;
+        IsGround = Mathf.Abs(rb.velocity.y) < 0.2f && hitG;
     }
 
     //ジャンプできるかどうかを調べます。
     public bool IsCanJamp()
     {
-        return !(IsLadder || !IsGround || IsGondra || IsJumping || rb.velocity.y > 3.5f);
+        return !(IsLadder || !IsGround || IsGondra || IsJumping || !AcceptJump || Mathf.Abs(rb.velocity.y) > 0.2f);
     }
 
     //動くことが可能かどうかを判断します。
@@ -340,12 +350,17 @@ public class PlayerController : MonoBehaviour
         rb.useGravity = false;
     }
 
-    //ゴンドラ下車時の処理。alightig分プレイヤーが吹き飛ばされる。
-    public void GondraExit(Vector3 Alighting)
+    //ゴンドラ下車時の処理。要するに原状復帰。
+    public void GondraExit()
     {
-        rb.AddForce(Alighting);
         IsGondra = false;
         rb.useGravity = true;
+    }
+
+    public void LadderEnter()
+    {
+        IsLadder = true;
+
     }
     
     //リスポーン処理。最後に触れたSavePointの情報を用いて再誕します。
@@ -367,11 +382,12 @@ public class PlayerController : MonoBehaviour
     //アニメーションへ状態を送信するメソッド。
     private void SetAnimStates(bool reset = false)
     {
-        anim.SetBool("isRunning", LRmoved && !reset);
-        anim.SetBool("isJumping", IsJumping && !IsGround && !reset);
+        anim.SetBool("isRunning", LRmoved && !IsLadder && !IsJumping&& Mathf.Abs(rb.velocity.y) < 0.2f && !reset);
+        anim.SetBool("isJumping", IsJumping && !IsGround && !IsLadder && !reset);
         anim.SetBool("isLadder", IsLadder && !reset);
-        anim.SetBool("isUp", rb.velocity.y > 0 && !reset);
+        anim.SetBool("isUp", rb.velocity.y > 0.2f && IsJumping && !reset);
         anim.SetBool("Gondra", IsGondra && !reset);
+        anim.SetBool("IsFall", rb.velocity.y < -0.2f && !reset);
     }
 
     //跳びます。
@@ -379,6 +395,11 @@ public class PlayerController : MonoBehaviour
     {
         rb.AddForce(new Vector3(0, JumpFouce));
         A_source.PlayOneShot(jumpSE);
+    }
+
+    private void JumpOK()
+    {
+        AcceptJump = true;
     }
 
     //debug code
