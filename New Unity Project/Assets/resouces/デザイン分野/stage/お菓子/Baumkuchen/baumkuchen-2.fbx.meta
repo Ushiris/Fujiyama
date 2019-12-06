@@ -3,7 +3,42 @@ guid: 82b9a82b521ce74489a60f5f57e69756
 ModelImporter:
   serializedVersion: 25
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: niji_1
+    second: {fileID: 2100000, guid: 761867bc261f6e44aa0b1728c1fa99b0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: niji_2
+    second: {fileID: 2100000, guid: 12171c7541458ff478ffcfb55447cab7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: niji_3
+    second: {fileID: 2100000, guid: 652ea0ec894bf2d498787804f67873ae, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: niji_4
+    second: {fileID: 2100000, guid: 15a842b7bf934a84b983ef624af4033b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: niji_5
+    second: {fileID: 2100000, guid: dadad2ab8a9be2745b3e070e7fc6c0fc, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: niji_6
+    second: {fileID: 2100000, guid: 9f3c00666c0538948908d5d6a7d8a9f5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: niji_7
+    second: {fileID: 2100000, guid: 7fb0acb5bb26552458530f455bb681f5, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

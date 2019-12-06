@@ -3,7 +3,22 @@ guid: f32ae0bfaf2ad864db3e7d5e349dc4b6
 ModelImporter:
   serializedVersion: 25
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: houseki
+    second: {fileID: 2100000, guid: 07a4e8a5552cabf4390d818638e3431a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: metal1
+    second: {fileID: 2100000, guid: 65652993fcf783945a442d38485df65c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pearl_white
+    second: {fileID: 2100000, guid: 0931062942ed7c2498e2049739b2c076, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

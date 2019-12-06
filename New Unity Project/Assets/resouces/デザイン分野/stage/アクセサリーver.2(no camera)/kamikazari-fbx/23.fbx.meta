@@ -3,7 +3,42 @@ guid: 0a15e5cac84f91b4b818616bba00396d
 ModelImporter:
   serializedVersion: 25
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: houseki
+    second: {fileID: 2100000, guid: 98cc4151f2d50cc4b8ca2c8b79677b3e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: metal1
+    second: {fileID: 2100000, guid: 5e8ca7a1dcbe7504dbc39757bca8e5e4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: metal2
+    second: {fileID: 2100000, guid: 6fb68ee2654988c4886176900a589045, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: metal3
+    second: {fileID: 2100000, guid: bffe5dc54f930e04f8cce2617c35eb0f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pearl_pink
+    second: {fileID: 2100000, guid: 35fa4fc04a4bf504c996884f4fee6cc1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pearl_white
+    second: {fileID: 2100000, guid: 35b65406778979847ac9742e96d46751, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pearl_yellow
+    second: {fileID: 2100000, guid: 127f40e68f5fd8d459b447b97862d9d7, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
