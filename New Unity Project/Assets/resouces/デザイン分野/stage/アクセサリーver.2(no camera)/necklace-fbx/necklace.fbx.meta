@@ -3,7 +3,22 @@ guid: 4fed43d0eae23a245b4e221e99c67c08
 ModelImporter:
   serializedVersion: 25
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: metal1
+    second: {fileID: 2100000, guid: 1a507777ef7bd7d44bdc7f2031c93ad0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pearl_white
+    second: {fileID: 2100000, guid: 6a32012790fbe3c4db2590948daf5814, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ribon
+    second: {fileID: 2100000, guid: 8793ce2da07e71645a88c9095e184a11, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

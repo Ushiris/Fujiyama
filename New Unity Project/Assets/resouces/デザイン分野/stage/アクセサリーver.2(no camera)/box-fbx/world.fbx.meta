@@ -3,7 +3,22 @@ guid: d0ca97f275d1f114d8117e1d5cc50718
 ModelImporter:
   serializedVersion: 25
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: butterfly
+    second: {fileID: 2100000, guid: f85d0c3cd06574149b70d22449c33003, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pearl
+    second: {fileID: 2100000, guid: 30f12ca449b3ff04e977c607df9a3070, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ribon
+    second: {fileID: 2100000, guid: aa635c1b21f87cf43a04b03727c18281, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

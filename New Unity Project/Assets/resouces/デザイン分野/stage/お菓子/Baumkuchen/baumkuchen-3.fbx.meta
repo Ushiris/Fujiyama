@@ -3,7 +3,22 @@ guid: 6fa81cecff1d928409c10ab62e8e579e
 ModelImporter:
   serializedVersion: 25
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: choco_1
+    second: {fileID: 2100000, guid: 275be6c035f37da45aea4861fd7ecd08, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: choco_2
+    second: {fileID: 2100000, guid: f0b34d288970c8047bb1ee61024acc2e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: choco_3
+    second: {fileID: 2100000, guid: bc9c9df5c8588b0478a63129c0468a70, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
