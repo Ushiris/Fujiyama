@@ -10,6 +10,8 @@ public class FadeOut : MonoBehaviour
     public string scene="Title";
     public bool isAlone = true;//単体で動作させる場合にはtrue
     public bool isWhite = false;
+    public bool isStageEnd = false;
+    public int stage;
     bool isActive = false;
     float timer = 0f;
 
@@ -46,6 +48,17 @@ public class FadeOut : MonoBehaviour
 
     private void GoToNextScene()
     {
+        bool end = false;
+        if(isStageEnd)
+        {
+            end = GameDirector.ClearStage(stage);
+        }
+        if(end)
+        {
+            scene = "Title";
+        }
         GameDirector.OpenScene(scene);
     }
+
+
 }

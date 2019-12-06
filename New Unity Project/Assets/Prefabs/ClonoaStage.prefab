@@ -197,9 +197,9 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 3766801870728097758, guid: 34f77236b95f1034a9c9b1a020ebb5c4, type: 3}
-  - {fileID: -6547561337619305745, guid: 34f77236b95f1034a9c9b1a020ebb5c4, type: 3}
-  - {fileID: -6194378820814188793, guid: 34f77236b95f1034a9c9b1a020ebb5c4, type: 3}
+  - {fileID: 2100000, guid: b7ad4289778d37f48b1ec60445256c41, type: 2}
+  - {fileID: 2100000, guid: 9521a630fa92054429814c04df5ef85a, type: 2}
+  - {fileID: 2100000, guid: 845ffe350aa038847b3fe9614018fac1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -373,21 +373,6 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Plane
       objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: efc986cefc666524f81bd7a09cd1ea16,
-        type: 3}
-      propertyPath: m_Name
-      value: floor1
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: efc986cefc666524f81bd7a09cd1ea16,
-        type: 3}
-      propertyPath: m_TagString
-      value: Plane
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: efc986cefc666524f81bd7a09cd1ea16,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: efc986cefc666524f81bd7a09cd1ea16,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -442,6 +427,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: efc986cefc666524f81bd7a09cd1ea16,
+        type: 3}
+      propertyPath: m_Name
+      value: floor1
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: efc986cefc666524f81bd7a09cd1ea16,
+        type: 3}
+      propertyPath: m_TagString
+      value: Plane
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: efc986cefc666524f81bd7a09cd1ea16,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: efc986cefc666524f81bd7a09cd1ea16, type: 3}

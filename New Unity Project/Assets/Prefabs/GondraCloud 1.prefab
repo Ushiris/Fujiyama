@@ -63,6 +63,8 @@ MonoBehaviour:
   speed: 1
   isCircle: 0
   center: {x: 0, y: 0, z: 0}
+  RotateAxis: {x: 0, y: 1, z: 0}
+  RotateAngle: 90
 --- !u!1 &4357373573263999388
 GameObject:
   m_ObjectHideFlags: 0
@@ -212,9 +214,9 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -6139516148232042669, guid: fd6dcd640330b904f9645e8537c5abd2, type: 3}
-  - {fileID: -6949799667166120619, guid: fd6dcd640330b904f9645e8537c5abd2, type: 3}
-  - {fileID: 2916118189840742947, guid: fd6dcd640330b904f9645e8537c5abd2, type: 3}
+  - {fileID: 2100000, guid: 924ec27c81f95944492f877d3d48ee3f, type: 2}
+  - {fileID: 2100000, guid: 34dc636f22c60e74789da9dc5830f671, type: 2}
+  - {fileID: 2100000, guid: 9c628072ccd7b3045b33074b6be64315, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

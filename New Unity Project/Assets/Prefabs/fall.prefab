@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 4870221278975859535}
   - component: {fileID: 6989892017561434878}
   m_Layer: 0
-  m_Name: GondraCloud
+  m_Name: fall
   m_TagString: gondra
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -245,9 +245,9 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2521052532583675134, guid: 4fed43d0eae23a245b4e221e99c67c08, type: 3}
-  - {fileID: -6949799667166120619, guid: 4fed43d0eae23a245b4e221e99c67c08, type: 3}
-  - {fileID: 2916118189840742947, guid: 4fed43d0eae23a245b4e221e99c67c08, type: 3}
+  - {fileID: 2100000, guid: 8793ce2da07e71645a88c9095e184a11, type: 2}
+  - {fileID: 2100000, guid: 1a507777ef7bd7d44bdc7f2031c93ad0, type: 2}
+  - {fileID: 2100000, guid: 6a32012790fbe3c4db2590948daf5814, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

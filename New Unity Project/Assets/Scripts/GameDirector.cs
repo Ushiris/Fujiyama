@@ -6,7 +6,9 @@ using UnityEngine.SceneManagement;
 
 public class GameDirector : MonoBehaviour
 {
-    public static PlayDataDirector PlayData;
+    static PlayDataDirector PlayData;
+    static bool AStageClear = false;
+    static bool BStageClear = false;
 
     private void Start()
     {
@@ -14,12 +16,33 @@ public class GameDirector : MonoBehaviour
         //PlayData.PlayStart();
     }
 
-    private void Update()
+    public static bool ClearStage(int stage)
     {
-        if(Input.GetKeyDown(KeyCode.C))
+        switch (stage)
         {
-            OpenScene("StageB");
+            case 1:
+                AStageClear = true;
+                break;
+            case 2:
+                BStageClear = true;
+                break;
+            default:
+                break;
         }
+
+        if(AStageClear&&BStageClear)
+        {
+            //PlayData.PlayEnd();
+            FlagReset();
+            return true;
+        }
+        return false;
+    }
+
+    static void FlagReset()
+    {
+        AStageClear = false;
+        BStageClear = false;
     }
 
     public void OnClickOpenScene(string SceneName)

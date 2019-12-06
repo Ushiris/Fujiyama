@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 //見ている向き
 public enum LR
@@ -41,6 +42,8 @@ public class PlayerController : MonoBehaviour
     public SaveManager SavePoint;
     public Animator anim;
     public AudioClip jumpSE;
+    public Image actImage;
+    public Sprite actUI;
 
     //入力の設定
     public List<KeyCode> right = new List<KeyCode> { KeyCode.D, KeyCode.RightArrow };
@@ -63,7 +66,9 @@ public class PlayerController : MonoBehaviour
     bool IsPause { get; set; }
     bool AcceptJump { get; set; }
     bool IsMovieMode = false;
+    bool isLadderDown = false;
     float MovieTimer;
+    float MovieDuration;
     float JumpTimer = 0.8f;
 
     //コンポーネント置き場
@@ -79,6 +84,10 @@ public class PlayerController : MonoBehaviour
     //アクションボタンで続行されるアクション
     public delegate void Action();
     public Action EventEffect;
+
+    //ムービーカットに必要な変数
+    Vector3 targetPos;
+    Vector3 startPos;
 
     //debug
     Vector3 def_p;
@@ -103,6 +112,8 @@ public class PlayerController : MonoBehaviour
         InputCheck();
         SetAnimStates(true);
         AcceptJump = true;
+        actImage.sprite = actUI;
+        actImage.color = new Color(1, 1, 1, 0);
     }
 
     // Update is called once per frame
@@ -117,12 +128,7 @@ public class PlayerController : MonoBehaviour
                 IsMovieMode = false;
             }
 
-            if(IsLadder)
-            {
-                GoLadder(looking);
-            }
-
-            GoWalk();
+            GoWalk(MovieDuration - MovieTimer / MovieDuration);
             return;
         }
 
@@ -136,6 +142,15 @@ public class PlayerController : MonoBehaviour
                 Invoke("JumpOK", 0.2f);
                 JumpTimer = JumpCoolTime;
             }
+        }
+
+        if(isActionable)
+        {
+            actImage.color = Color.white;
+        }
+        else
+        {
+            actImage.color = Color.clear;
         }
 
         LRmoved = false;
@@ -242,10 +257,15 @@ public class PlayerController : MonoBehaviour
 
         if(other.tag=="MemoryFragment")
         {
-            IsPause = true;
-            rb.velocity = Vector3.zero;
-            Invoke("Resume", 6.1f);
+            GetMemoryFragment();
         }
+    }
+
+    private void GetMemoryFragment()
+    {
+        IsPause = true;
+        rb.velocity = Vector3.zero;
+        Invoke("Resume", 6.1f);
     }
 
     private void Resume()
@@ -253,26 +273,17 @@ public class PlayerController : MonoBehaviour
         IsPause = false;
     }
     
-    private void OnCollisionEnter(Collision collision)
-    {
-        //はしごに足をかけ始めたどうかの判定
-        if (collision.gameObject.tag == "Ladder")
-        {
-            LadderEnter();
-        }
-    }
-
-    public void LadderEnd()
-    {
-        IsLadder = false;
-        speed = DefaultSpeed;
-        rb.useGravity = true;
-    }
-    
     //CheckPoint用のLookAt関数。高さを無視します。
     public void Look(CheckPoint to)
     {
         Vector3 lookPos = new Vector3(to.transform.position.x, transform.position.y, to.transform.position.z);
+        transform.LookAt(lookPos);
+    }
+
+    //はしご用の（略）
+    public void Look(Vector3 target)
+    {
+        Vector3 lookPos = new Vector3(target.x, transform.position.y, target.z);
         transform.LookAt(lookPos);
     }
 
@@ -363,11 +374,30 @@ public class PlayerController : MonoBehaviour
         rb.useGravity = true;
     }
 
-    public void LadderEnter()
+    public void LadderEnter(Vector3 to,float duration)
     {
-        IsLadder = true;
+        IsLadder = transform.position.y < to.y;
+        IsPause = true;
         rb.useGravity = false;
-        rb.velocity = Vector3.zero;
+        SetAnimStates(true);
+        string setFlagName = (transform.position.y > to.y) ? "isLadderDown" : "isLadder";
+        anim.SetBool(setFlagName, true);
+        rb.velocity = (to - transform.position)/duration;
+        Invoke("LadderExit", duration);
+        Invoke("Resume", duration);
+    }
+
+    public void LadderExit()
+    {
+        SetGoWalkMode(transform.position + transform.forward, 0.3f);
+        Invoke("LadderEnd", 0.3f);
+    }
+
+    private void LadderEnd()
+    {
+        IsLadder = false;
+        rb.useGravity = true;
+        SetAnimStates(true);
     }
     
     //リスポーン処理。最後に触れたSavePointの情報を用いて再誕します。
@@ -391,10 +421,11 @@ public class PlayerController : MonoBehaviour
     {
         anim.SetBool("isRunning", LRmoved && !IsLadder && !IsJumping&& Mathf.Abs(rb.velocity.y) < 0.2f && !reset);
         anim.SetBool("isJumping", IsJumping && !IsGround && !IsLadder && !reset);
-        anim.SetBool("isLadder", IsLadder && !reset);
         anim.SetBool("isUp", rb.velocity.y > 0.2f && IsJumping && !reset);
+        anim.SetBool("isLadder", IsLadder && !reset);
         anim.SetBool("Gondra", IsGondra && !reset);
         anim.SetBool("IsFall", rb.velocity.y < -0.2f && !reset);
+        anim.SetBool("isLadderDown", isLadderDown && !reset);
     }
 
     //跳びます。
@@ -411,29 +442,18 @@ public class PlayerController : MonoBehaviour
 
     public void SetGoWalkMode(Vector3 to,float duration)
     {
-        transform.LookAt(to);
+        Look(to);
+        startPos = transform.position;
+        targetPos = to;
         IsMovieMode = true;
         MovieTimer = duration;
+        MovieDuration = duration;
     }
 
-    public void SetLadderMode(float duration)
-    {
-        LadderEnter();
-        IsMovieMode = true;
-        MovieTimer = duration;
-    }
-
-    public void GoWalk()
+    public void GoWalk(float progles)
     {
         anim.SetBool("isRunning", true);
-        rb.velocity = transform.forward * speed;
-    }
-
-    public void GoLadder(LR lR)
-    {
-        SetAnimStates(true);
-        anim.SetBool("isLadder", true);
-        rb.velocity = (lR == LR.right ? transform.up : -transform.up);
+        transform.position = Vector3.Lerp(startPos, targetPos, progles);
     }
 
     //debug code
