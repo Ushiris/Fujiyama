@@ -116,6 +116,7 @@ GameObject:
   - component: {fileID: 6232414579549544943}
   - component: {fileID: 6232414579549544932}
   - component: {fileID: 3835934277565399664}
+  - component: {fileID: 1812711431334145023}
   m_Layer: 0
   m_Name: PlayerCharactor 1
   m_TagString: Player
@@ -174,10 +175,14 @@ MonoBehaviour:
   from: {fileID: 0}
   to: {fileID: 0}
   SavePoint: {fileID: 0}
+  anim: {fileID: 0}
+  jumpSE: {fileID: 0}
   right: 1301000064000000
   left: 1401000061000000
   jump: 20000000
   action: 77000000
+  exit: 1b000000
+  isActionable: 0
 --- !u!136 &3835934277565399664
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -192,6 +197,102 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!82 &1812711431334145023
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6232414579549544942}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &6232414580638636198
 GameObject:
   m_ObjectHideFlags: 0
@@ -261,21 +362,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: chara_model
       objectReference: {fileID: 0}
-    - target: {fileID: -6057140222963153312, guid: ae57603e3c79b9b41ba3e4ca46d19802,
-        type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 2866b3c81f291c9409a676958ab2b126, type: 2}
-    - target: {fileID: -6057140222963153312, guid: ae57603e3c79b9b41ba3e4ca46d19802,
-        type: 3}
-      propertyPath: m_ApplyRootMotion
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -6057140222963153312, guid: ae57603e3c79b9b41ba3e4ca46d19802,
-        type: 3}
-      propertyPath: m_Avatar
-      value: 
-      objectReference: {fileID: 9000000, guid: df2e41fab2dc0a543852dcc18bff6c5f, type: 3}
     - target: {fileID: -4216859302048453862, guid: ae57603e3c79b9b41ba3e4ca46d19802,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -346,6 +432,21 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: -6057140222963153312, guid: ae57603e3c79b9b41ba3e4ca46d19802,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 2866b3c81f291c9409a676958ab2b126, type: 2}
+    - target: {fileID: -6057140222963153312, guid: ae57603e3c79b9b41ba3e4ca46d19802,
+        type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -6057140222963153312, guid: ae57603e3c79b9b41ba3e4ca46d19802,
+        type: 3}
+      propertyPath: m_Avatar
+      value: 
+      objectReference: {fileID: 9000000, guid: df2e41fab2dc0a543852dcc18bff6c5f, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ae57603e3c79b9b41ba3e4ca46d19802, type: 3}
 --- !u!4 &118577131279679663 stripped

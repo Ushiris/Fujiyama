@@ -52,6 +52,7 @@ public class PlayerController : MonoBehaviour
     readonly List<KeyCode> d_respawn = new List<KeyCode> { KeyCode.R };
 
     //キャラクターのステート
+    public bool isActionable = false;
     bool IsGondra = false;
     bool IsGround = false;
     bool IsLadder = false;
@@ -59,10 +60,11 @@ public class PlayerController : MonoBehaviour
     bool[] PlayerInput = { false, };
     bool LRmoved = false;
     bool IsRiding = false;
-    public bool isActionable = false;
-    float JumpTimer = 0.8f;
     bool IsPause { get; set; }
-    private bool AcceptJump { get; set; }
+    bool AcceptJump { get; set; }
+    bool IsMovieMode = false;
+    float MovieTimer;
+    float JumpTimer = 0.8f;
 
     //コンポーネント置き場
     Rigidbody rb;
@@ -106,6 +108,24 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //ムービー時に操作を受け付けない
+        if(IsMovieMode)
+        {
+            MovieTimer -= Time.deltaTime;
+            if(MovieTimer<=0f)
+            {
+                IsMovieMode = false;
+            }
+
+            if(IsLadder)
+            {
+                GoLadder(looking);
+            }
+
+            GoWalk();
+            return;
+        }
+
         //ジャンプのクールタイム処理
         if (IsJumping)
         {
@@ -129,11 +149,6 @@ public class PlayerController : MonoBehaviour
             GameDirector.ShatDown();
         }
 
-        if (PlayerInput[(int)Commands.action])
-        {
-            EventEffect();
-        }
-
         //左右に動く
         if (PlayerInput[(int)Commands.right] || PlayerInput[(int)Commands.left])
         {
@@ -147,6 +162,12 @@ public class PlayerController : MonoBehaviour
             IsJumping = true;
             AcceptJump = false;
             Jump();
+        }
+
+        //他スクリプトで指定されたアクションを発生させる
+        if (PlayerInput[(int)Commands.action])
+        {
+            EventEffect();
         }
 
         //左右の入力なしなら、左右の速度を減衰させる
@@ -237,30 +258,15 @@ public class PlayerController : MonoBehaviour
         //はしごに足をかけ始めたどうかの判定
         if (collision.gameObject.tag == "Ladder")
         {
-            IsLadder = true;
-            rb.useGravity = false;
-            rb.velocity = Vector3.zero;
+            LadderEnter();
         }
     }
 
-    private void OnCollisionStay(Collision collision)
+    public void LadderEnd()
     {
-        //はしごに足をかけているかどうかの判定
-        if (collision.gameObject.tag == "Ladder")
-        {
-            IsLadder = true;
-        }
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        //梯子を下りた時の処理
-        if (collision.gameObject.tag == "Ladder")
-        {
-            IsLadder = false;
-            speed = DefaultSpeed;
-            rb.useGravity = true;
-        }
+        IsLadder = false;
+        speed = DefaultSpeed;
+        rb.useGravity = true;
     }
     
     //CheckPoint用のLookAt関数。高さを無視します。
@@ -360,7 +366,8 @@ public class PlayerController : MonoBehaviour
     public void LadderEnter()
     {
         IsLadder = true;
-
+        rb.useGravity = false;
+        rb.velocity = Vector3.zero;
     }
     
     //リスポーン処理。最後に触れたSavePointの情報を用いて再誕します。
@@ -400,6 +407,33 @@ public class PlayerController : MonoBehaviour
     private void JumpOK()
     {
         AcceptJump = true;
+    }
+
+    public void SetGoWalkMode(Vector3 to,float duration)
+    {
+        transform.LookAt(to);
+        IsMovieMode = true;
+        MovieTimer = duration;
+    }
+
+    public void SetLadderMode(float duration)
+    {
+        LadderEnter();
+        IsMovieMode = true;
+        MovieTimer = duration;
+    }
+
+    public void GoWalk()
+    {
+        anim.SetBool("isRunning", true);
+        rb.velocity = transform.forward * speed;
+    }
+
+    public void GoLadder(LR lR)
+    {
+        SetAnimStates(true);
+        anim.SetBool("isLadder", true);
+        rb.velocity = (lR == LR.right ? transform.up : -transform.up);
     }
 
     //debug code
