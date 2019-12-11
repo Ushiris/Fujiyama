@@ -16,6 +16,8 @@ public class OpenDoor : MonoBehaviour
     public List<Sprite> images;
     public List<float> timing;
 
+    public AudioClip openSE;
+
     Image image;
     PlayerController pl;
     FadeOut fade;
@@ -71,6 +73,8 @@ public class OpenDoor : MonoBehaviour
         
         pl.SetGoWalkMode(pl.transform.position + Vector3.forward * MoveScale, Duration + 0.5f);
         fade.FadeStart();
+
+        gameObject.AddComponent<AudioSource>().PlayOneShot(openSE);
 
         if(IsAnimation)
         {

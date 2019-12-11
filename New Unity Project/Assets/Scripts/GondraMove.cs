@@ -10,6 +10,7 @@ public class GondraMove : MonoBehaviour
     public Vector3 center;
     public Vector3 RotateAxis = new Vector3(0, 1, 0);
     public float RotateAngle = 90f;
+    public bool isRing = false;
 
     PlayerController player;
     Vector3 before;
@@ -53,12 +54,18 @@ public class GondraMove : MonoBehaviour
             if (progress >= 1f)
             {
                 isActive = false;
-                isActionable = true;
-                isDefPos = !isDefPos;
                 progress = 0f;
-                from = isDefPos ? DefaultPosition : to;
-                target = isDefPos ? to : DefaultPosition;
-                player.GondraExit();
+                player.IsGondraGetOut = true;
+                player.IsGondra = false;
+                player.anim.SetBool("Gondra", false);
+                if (isRing)
+                {
+                    Invoke("getOut", 2f);
+                }
+                else
+                {
+                    getOut();
+                }
             }
         }
 
@@ -72,7 +79,6 @@ public class GondraMove : MonoBehaviour
             player = collision.gameObject.GetComponent<PlayerController>();
             player.isActionable = true;
             player.EventEffect = Action;
-
         }
         
     }
@@ -89,10 +95,32 @@ public class GondraMove : MonoBehaviour
     {
         if (isActionable)
         {
-            isActive = true;
-            progress = 0f;
             isActionable = false;
-            player.GondraEnter();
+            if (isRing)
+            {
+                player.IsGondra = true;
+                Invoke("go", 2f);
+            }
+            else
+            {
+                go();
+            }
         }
+    }
+
+    void go()
+    {
+        isActive = true;
+        progress = 0f;
+        player.GondraEnter();
+    }
+
+    void getOut()
+    {
+        isActionable = true;
+        isDefPos = !isDefPos;
+        from = isDefPos ? DefaultPosition : to;
+        target = isDefPos ? to : DefaultPosition;
+        player.GondraExit();
     }
 }

@@ -7,8 +7,10 @@ public class ShowImage : MonoBehaviour
 {
     public Sprite image;
     public Image frame;
+    public AudioClip getSE;
     bool isFade = false;
     float timer = 0;
+    AudioSource Audio;
 
     // Update is called once per frame
     void Update()
@@ -31,6 +33,7 @@ public class ShowImage : MonoBehaviour
                 isFade = false;
             }
         }
+
     }
 
     private void OnTriggerEnter(Collider other)
@@ -40,6 +43,9 @@ public class ShowImage : MonoBehaviour
             frame.sprite = image;
             frame.color = new Color(1f,1f,1f,0f);
             isFade = true;
+            Audio = gameObject.AddComponent<AudioSource>();
+            other.GetComponent<PlayerController>().GetMemoryFragment();
+            Audio.PlayOneShot(getSE);
         }
     }
 }

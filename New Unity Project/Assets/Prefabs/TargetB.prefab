@@ -106,6 +106,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   image: {fileID: 0}
   frame: {fileID: 0}
+  getSE: {fileID: 8300000, guid: de6e25d4e81c06a4b82bf1a90ca19ec6, type: 3}
 --- !u!65 &1925266908282599449
 BoxCollider:
   m_ObjectHideFlags: 0
