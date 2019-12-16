@@ -18,7 +18,7 @@ public enum TimerEvents
 public class PlayDataDirector : MonoBehaviour
 {
     public int player_id = 0;
-    private string file_dir = Application.dataPath + "/PlayData/" + System.DateTime.Now + ".csv";
+    string file_dir = Application.dataPath + "/PlayData/" + System.DateTime.Now + ".csv";
     const int STAGE_A_SECTION_COUNT = 12;
     const int STAGE_B_SECTION_COUNT = 12;
 
@@ -30,15 +30,15 @@ public class PlayDataDirector : MonoBehaviour
     float BreakTime = 0f;
     int LostCount = 0;
 
-    List<float?> SectionClearTimes = new List<float?>(STAGE_A_SECTION_COUNT);
-    List<float?> SectionBreakTimes = new List<float?>(STAGE_B_SECTION_COUNT);
-    List<int?> SectionLostCounts = new List<int?>(STAGE_A_SECTION_COUNT + STAGE_B_SECTION_COUNT);
+    List<float> SectionClearTimes = new List<float>(STAGE_A_SECTION_COUNT);
+    List<float> SectionBreakTimes = new List<float>(STAGE_B_SECTION_COUNT);
+    List<int> SectionLostCounts = new List<int>(STAGE_A_SECTION_COUNT + STAGE_B_SECTION_COUNT);
 
     private void Start()
     {
-        SectionClearTimes.ForEach(n => n = null);
-        SectionBreakTimes.ForEach(n => n = null);
-        SectionLostCounts.ForEach(n => n = null);
+        SectionClearTimes.ForEach(n => n = 0);
+        SectionBreakTimes.ForEach(n => n = 0);
+        SectionLostCounts.ForEach(n => n = 0);
     }
 
     // Update is called once per frame

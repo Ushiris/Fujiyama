@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4762372561646303743}
   - component: {fileID: 4762372561646303742}
   m_Layer: 0
-  m_Name: GondraCloud 1
+  m_Name: GondraRing
   m_TagString: gondra
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -65,6 +65,7 @@ MonoBehaviour:
   center: {x: 0, y: 0, z: 0}
   RotateAxis: {x: 0, y: 1, z: 0}
   RotateAngle: 90
+  isRing: 0
 --- !u!1 &4357373573263999388
 GameObject:
   m_ObjectHideFlags: 0
@@ -78,7 +79,7 @@ GameObject:
   - component: {fileID: 575062852804724012}
   - component: {fileID: 5784504998246908198}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: seat
   m_TagString: gondra
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -168,7 +169,7 @@ GameObject:
   - component: {fileID: 596433862088584818}
   - component: {fileID: 3468620617454815331}
   m_Layer: 0
-  m_Name: ring (Missing Prefab)
+  m_Name: ring
   m_TagString: gondra
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -184,8 +185,7 @@ Transform:
   m_LocalRotation: {x: 0.6845838, y: 0.6845838, z: -0.1770454, w: -0.1770454}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 12, y: 12, z: 12}
-  m_Children:
-  - {fileID: 2367348471416503255}
+  m_Children: []
   m_Father: {fileID: 2715142135477767559}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 209, z: 90}
@@ -236,33 +236,3 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!1 &5430107234781981664
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2367348471416503255}
-  m_Layer: 0
-  m_Name: Missing Prefab (Dummy)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &2367348471416503255
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5430107234781981664}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 8437644999026352215}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

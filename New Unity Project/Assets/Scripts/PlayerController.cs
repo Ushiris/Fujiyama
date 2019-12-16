@@ -29,11 +29,11 @@ public class PlayerController : MonoBehaviour
     //定数
     private const KeyCode ExitKey = KeyCode.Escape;
     private const KeyCode DebugKey = KeyCode.B;
-    private const float JumpCoolTime = 0.8f;
 
     //動作のパラメータ
     public float speed;
     public float JumpFouce;
+    public float JumpCoolTime = 0.8f;
 
     //初期設定が必要な変数
     public LR looking;
@@ -56,6 +56,7 @@ public class PlayerController : MonoBehaviour
     public List<KeyCode> exit = new List<KeyCode> { KeyCode.Escape };
     readonly List<KeyCode> debug = new List<KeyCode> { KeyCode.B };
     readonly List<KeyCode> d_respawn = new List<KeyCode> { KeyCode.R };
+    bool[] PlayerInput = { false, };
 
     //キャラクターのステート
     public bool isActionable = false;
@@ -65,7 +66,6 @@ public class PlayerController : MonoBehaviour
     bool IsGround = false;
     bool IsLadder = false;
     bool IsJumping = false;
-    bool[] PlayerInput = { false, };
     bool LRmoved = false;
     bool IsRiding = false;
     bool IsPause { get; set; }
@@ -81,7 +81,7 @@ public class PlayerController : MonoBehaviour
     Rigidbody rb;
     AudioSource A_source;
 
-    //リセットされる可能性がある変数の初期値
+    //変数の初期値
     float DefaultSpeed;
 
     //前フレームの入力状態の保存
@@ -277,10 +277,15 @@ public class PlayerController : MonoBehaviour
 
     public void GetMemoryFragment()
     {
-        MainObj.remined();
+        Invoke("Remind", 2.0f);
         IsPause = true;
         rb.velocity = Vector3.zero;
         Invoke("Resume", 5.5f);
+    }
+
+    public void Remind()
+    {
+        MainObj.remined();
     }
 
     private void Resume()
@@ -426,6 +431,7 @@ public class PlayerController : MonoBehaviour
         from = SavePoint.p_cp;
         to = SavePoint.t_cp;
         looking = SavePoint.look;
+        rb.velocity = Vector3.zero;
         Look(to);
     }
 
