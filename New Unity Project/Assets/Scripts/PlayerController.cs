@@ -72,6 +72,8 @@ public class PlayerController : MonoBehaviour
     bool AcceptJump { get; set; }
     bool IsMovieMode = false;
     bool isLadderDown = false;
+    bool isLeftBind = false;
+    bool isRightBind = false;
     float MovieTimer;
     float MovieDuration;
     float JumpTimer = 0.8f;
@@ -125,6 +127,14 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(isActionable&&!IsPause&&!IsMovieMode)
+        {
+            actImage.color = Color.white;
+        }
+        else
+        {
+            actImage.color = Color.clear;
+        }
         //ムービー時に操作を受け付けない
         if(IsMovieMode)
         {
@@ -137,7 +147,7 @@ public class PlayerController : MonoBehaviour
 
             if (!IsNotWalkMovie)
             {
-                GoWalk(MovieDuration - MovieTimer / MovieDuration);
+                GoWalk((MovieDuration- MovieTimer) / MovieDuration);
             }
             return;
         }
@@ -154,14 +164,6 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if(isActionable)
-        {
-            actImage.color = Color.white;
-        }
-        else
-        {
-            actImage.color = Color.clear;
-        }
 
         LRmoved = false;
 
@@ -202,10 +204,10 @@ public class PlayerController : MonoBehaviour
             float z = Mathf.Abs(rb.velocity.z * 4 / 5f) < 0.05f ? (0.0f) : (rb.velocity.z * 4 / 5f);
             rb.velocity = new Vector3(x, rb.velocity.y, z);
         }
-        else
+        else if (!IsJumping && rb.velocity.y < 0.2f)
         {
             FootAudioTimer -= Time.deltaTime;
-            if(FootAudioTimer<0)
+            if (FootAudioTimer < 0)
             {
                 FootAudioTimer = footTiming;
                 A_source.PlayOneShot(walkSE);
@@ -350,6 +352,14 @@ public class PlayerController : MonoBehaviour
         {
             state[(int)Commands.action] = false;
         }
+        if(isRightBind)
+        {
+            state[(int)Commands.right] = false;
+        }
+        if(isLeftBind)
+        {
+            state[(int)Commands.left] = false;
+        }
 
         beforeInput = state;
         PlayerInput = state;
@@ -413,8 +423,15 @@ public class PlayerController : MonoBehaviour
 
     public void LadderExit()
     {
-        SetGoWalkMode(transform.position + transform.forward, 0.3f);
-        Invoke("LadderEnd", 0.3f);
+        Debug.Log(transform.forward.x * 1000);
+        rb.AddForce(new Vector3(0, 200, 0));
+        Invoke("push", 0.2f);
+        LadderEnd();
+    }
+
+    public void push()
+    {
+        rb.AddForce(new Vector3(transform.forward.x * 300, 0, transform.forward.z * 300));
     }
 
     private void LadderEnd()
@@ -479,6 +496,24 @@ public class PlayerController : MonoBehaviour
     {
         anim.SetBool("isRunning", true);
         transform.position = Vector3.Lerp(startPos, targetPos, progles);
+    }
+
+    public void Bind()
+    {
+        if(looking == LR.right)
+        {
+            isRightBind = true;
+        }
+        else
+        {
+            isLeftBind = true;
+        }
+    }
+
+    public void React()
+    {
+        isRightBind = false;
+        isLeftBind = false;
     }
 
     //debug code

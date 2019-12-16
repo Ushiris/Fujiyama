@@ -156,7 +156,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 80
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &6232414579549544932
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -171,6 +171,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 0.06
   JumpFouce: 300
+  JumpCoolTime: 0.8
   looking: 0
   from: {fileID: 0}
   to: {fileID: 0}
@@ -188,6 +189,9 @@ MonoBehaviour:
   action: 770000004c010000
   exit: 1b000000
   isActionable: 0
+  IsGondra: 0
+  IsGondraGetOut: 0
+  IsNotWalkMovie: 0
 --- !u!136 &3835934277565399664
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -195,10 +199,10 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6232414579549544942}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 79a1af8a043508345b729192dc9278dc, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.5
+  m_Radius: 0.4
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
