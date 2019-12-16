@@ -176,13 +176,16 @@ MonoBehaviour:
   to: {fileID: 0}
   SavePoint: {fileID: 0}
   anim: {fileID: 0}
-  jumpSE: {fileID: 0}
+  jumpSE: {fileID: 8300000, guid: d9827eadfb9eb654189c80cad8bb4e9b, type: 3}
+  walkSE: {fileID: 8300000, guid: bbd3e266dd0057543b845d69e25367bc, type: 3}
+  footTiming: 0.35
   actImage: {fileID: 0}
-  actUI: {fileID: 0}
-  right: 13010000640000004e010000
-  left: 140100006100000050010000
-  jump: 2000000001010000
-  action: 770000004a010000
+  actUI: {fileID: 5306210427349951732, guid: caa722b3105e7fb4981036b1bb8ec4e0, type: 3}
+  MainObj: {fileID: 0}
+  right: 1301000064000000
+  left: 1401000061000000
+  jump: 200000004b010000
+  action: 770000004c010000
   exit: 1b000000
   isActionable: 0
 --- !u!136 &3835934277565399664

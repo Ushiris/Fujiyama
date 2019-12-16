@@ -12,6 +12,7 @@ public class FadeOut : MonoBehaviour
     public bool isWhite = false;
     public bool isStageEnd = false;
     public int stage;
+    public AudioClip StageClearSE;
     bool isActive = false;
     float timer = 0f;
 
@@ -37,6 +38,12 @@ public class FadeOut : MonoBehaviour
         if(other.tag=="Player"&&isAlone)
         {
             FadeStart();
+            if (isStageEnd)
+            {
+                gameObject.AddComponent<AudioSource>().PlayOneShot(StageClearSE);
+
+            }
+
         }
     }
 

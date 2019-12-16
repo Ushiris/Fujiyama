@@ -3,7 +3,27 @@ guid: 742b52090ea1bae4794cf3d7c783e1ca
 ModelImporter:
   serializedVersion: 25
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: box_1_1
+    second: {fileID: 2100000, guid: 380331194280c3f4392c43d3cd4f14e4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: box_1_2
+    second: {fileID: 2100000, guid: d337912a80ecc934aa785aca4758d5e9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: t1
+    second: {fileID: 2100000, guid: 690eec0fb2ed2f94c8f62ea623297717, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: floor1
+    second: {fileID: 2800000, guid: 0f90013504a649a44945777f27190b2f, type: 3}
   materials:
     importMaterials: 1
     materialName: 0

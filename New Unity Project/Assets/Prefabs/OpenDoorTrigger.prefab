@@ -62,3 +62,8 @@ MonoBehaviour:
   MoveScale: 1000000
   NextScene: Title
   canvas: {fileID: 0}
+  isWhiteOut: 0
+  IsAnimation: 0
+  images: []
+  timing: []
+  openSE: {fileID: 8300000, guid: 9e0e9401d7d2f094a86f73357c10cccf, type: 3}

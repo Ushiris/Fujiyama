@@ -29,11 +29,11 @@ public class PlayerController : MonoBehaviour
     //定数
     private const KeyCode ExitKey = KeyCode.Escape;
     private const KeyCode DebugKey = KeyCode.B;
-    private const float JumpCoolTime = 0.8f;
 
     //動作のパラメータ
     public float speed;
     public float JumpFouce;
+    public float JumpCoolTime = 0.8f;
 
     //初期設定が必要な変数
     public LR looking;
@@ -42,8 +42,11 @@ public class PlayerController : MonoBehaviour
     public SaveManager SavePoint;
     public Animator anim;
     public AudioClip jumpSE;
+    public AudioClip walkSE;
+    public float footTiming = 0.5f;
     public Image actImage;
     public Sprite actUI;
+    public Remind MainObj;
 
     //入力の設定
     public List<KeyCode> right = new List<KeyCode> { KeyCode.D, KeyCode.RightArrow };
@@ -53,14 +56,16 @@ public class PlayerController : MonoBehaviour
     public List<KeyCode> exit = new List<KeyCode> { KeyCode.Escape };
     readonly List<KeyCode> debug = new List<KeyCode> { KeyCode.B };
     readonly List<KeyCode> d_respawn = new List<KeyCode> { KeyCode.R };
+    bool[] PlayerInput = { false, };
 
     //キャラクターのステート
     public bool isActionable = false;
-    bool IsGondra = false;
+    public bool IsGondra = false;
+    public bool IsGondraGetOut = false;
+    public bool IsNotWalkMovie = false;
     bool IsGround = false;
     bool IsLadder = false;
     bool IsJumping = false;
-    bool[] PlayerInput = { false, };
     bool LRmoved = false;
     bool IsRiding = false;
     bool IsPause { get; set; }
@@ -70,12 +75,13 @@ public class PlayerController : MonoBehaviour
     float MovieTimer;
     float MovieDuration;
     float JumpTimer = 0.8f;
+    float FootAudioTimer = 0;
 
     //コンポーネント置き場
     Rigidbody rb;
     AudioSource A_source;
 
-    //リセットされる可能性がある変数の初期値
+    //変数の初期値
     float DefaultSpeed;
 
     //前フレームの入力状態の保存
@@ -123,12 +129,16 @@ public class PlayerController : MonoBehaviour
         if(IsMovieMode)
         {
             MovieTimer -= Time.deltaTime;
+
             if(MovieTimer<=0f)
             {
                 IsMovieMode = false;
             }
 
-            GoWalk(MovieDuration - MovieTimer / MovieDuration);
+            if (!IsNotWalkMovie)
+            {
+                GoWalk(MovieDuration - MovieTimer / MovieDuration);
+            }
             return;
         }
 
@@ -192,6 +202,15 @@ public class PlayerController : MonoBehaviour
             float z = Mathf.Abs(rb.velocity.z * 4 / 5f) < 0.05f ? (0.0f) : (rb.velocity.z * 4 / 5f);
             rb.velocity = new Vector3(x, rb.velocity.y, z);
         }
+        else
+        {
+            FootAudioTimer -= Time.deltaTime;
+            if(FootAudioTimer<0)
+            {
+                FootAudioTimer = footTiming;
+                A_source.PlayOneShot(walkSE);
+            }
+        }
 
         //回転力の消去
         rb.angularVelocity = Vector3.zero;
@@ -254,18 +273,19 @@ public class PlayerController : MonoBehaviour
         {
             Respawn();
         }
-
-        if(other.tag=="MemoryFragment")
-        {
-            GetMemoryFragment();
-        }
     }
 
-    private void GetMemoryFragment()
+    public void GetMemoryFragment()
     {
+        Invoke("Remind", 2.0f);
         IsPause = true;
         rb.velocity = Vector3.zero;
-        Invoke("Resume", 6.1f);
+        Invoke("Resume", 5.5f);
+    }
+
+    public void Remind()
+    {
+        MainObj.remined();
     }
 
     private void Resume()
@@ -302,8 +322,8 @@ public class PlayerController : MonoBehaviour
 
         bool[] state =
             {
-            Std.CheckKeyList(right),
-            Std.CheckKeyList(left),
+            Std.CheckKeyList(right)||Input.GetAxis("PS4LR")>0.7f,
+            Std.CheckKeyList(left)||Input.GetAxis("PS4LR")<-0.7f,
             Std.CheckKeyList(jump),
             Std.CheckKeyList(action),
             Std.CheckKeyList(exit),
@@ -356,22 +376,26 @@ public class PlayerController : MonoBehaviour
     //動くことが可能かどうかを判断します。
     public bool IsMovable()
     {
-        return !IsGondra;
+        return !IsGondra && !IsGondraGetOut;
     }
 
     //ゴンドラ乗車時の処理。プレイヤーの動きを静止させる。
     public void GondraEnter()
     {
-        IsGondra = true;
         rb.velocity = Vector3.zero;
         rb.useGravity = false;
+        IsMovieMode = true;
+        MovieTimer = 100;
+        IsNotWalkMovie = true;
     }
 
     //ゴンドラ下車時の処理。要するに原状復帰。
     public void GondraExit()
     {
-        IsGondra = false;
+        IsGondraGetOut = false;
         rb.useGravity = true;
+        MovieTimer = 0;
+        IsNotWalkMovie = true;
     }
 
     public void LadderEnter(Vector3 to,float duration)
@@ -407,6 +431,7 @@ public class PlayerController : MonoBehaviour
         from = SavePoint.p_cp;
         to = SavePoint.t_cp;
         looking = SavePoint.look;
+        rb.velocity = Vector3.zero;
         Look(to);
     }
 
@@ -417,7 +442,7 @@ public class PlayerController : MonoBehaviour
     }
 
     //アニメーションへ状態を送信するメソッド。
-    private void SetAnimStates(bool reset = false)
+    public void SetAnimStates(bool reset = false)
     {
         anim.SetBool("isRunning", LRmoved && !IsLadder && !IsJumping&& Mathf.Abs(rb.velocity.y) < 0.2f && !reset);
         anim.SetBool("isJumping", IsJumping && !IsGround && !IsLadder && !reset);

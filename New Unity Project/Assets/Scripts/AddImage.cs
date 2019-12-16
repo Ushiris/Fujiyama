@@ -13,12 +13,5 @@ public class AddImage : MonoBehaviour
     {
         child_img.sprite = sprite;
         child_img.color = new Color(1, 1, 1, 0);
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
