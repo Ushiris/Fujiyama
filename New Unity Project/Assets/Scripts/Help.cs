@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Help : MonoBehaviour
 {
@@ -14,7 +15,7 @@ public class Help : MonoBehaviour
 
         if ((time >= MinOpenTime) && Input.anyKey)
         {
-            GameDirector.OpenScene("Title");
+            SceneManager.LoadScene("Title");
         }
     }
 }
