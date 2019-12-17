@@ -277,11 +277,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void GetMemoryFragment()
+    public void GetMemoryFragment(int id)
     {
         Invoke("Remind", 2.0f);
         IsPause = true;
         rb.velocity = Vector3.zero;
+        GameDirector.Remind(id);
         Invoke("Resume", 5.5f);
     }
 

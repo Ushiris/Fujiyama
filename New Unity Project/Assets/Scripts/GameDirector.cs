@@ -9,6 +9,7 @@ public class GameDirector : MonoBehaviour
     static PlayDataDirector PlayData;
     static bool AStageClear = false;
     static bool BStageClear = false;
+    static List<bool> MemoryFragmentFlag=new List<bool>(6);
 
     private void Start()
     {
@@ -33,16 +34,35 @@ public class GameDirector : MonoBehaviour
         if(AStageClear&&BStageClear)
         {
             //PlayData.PlayEnd();
-            FlagReset();
             return true;
         }
         return false;
+    }
+
+    public static bool IsClearGame()
+    {
+        foreach(var fg in MemoryFragmentFlag)
+        {
+            if(!fg)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static void Remind(int id)
+    {
+        MemoryFragmentFlag[id] = true;
     }
 
     static void FlagReset()
     {
         AStageClear = false;
         BStageClear = false;
+        MemoryFragmentFlag.Clear();
+        MemoryFragmentFlag = new List<bool>(6);
     }
 
     public void OnClickOpenScene(string SceneName)
@@ -51,6 +71,10 @@ public class GameDirector : MonoBehaviour
     }
     public static void OpenScene(string SceneName)
     {
+        if(SceneName=="Title")
+        {
+            FlagReset();
+        }
         SceneManager.LoadScene(SceneName);
     }
 

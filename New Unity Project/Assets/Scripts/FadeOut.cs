@@ -41,9 +41,7 @@ public class FadeOut : MonoBehaviour
             if (isStageEnd)
             {
                 gameObject.AddComponent<AudioSource>().PlayOneShot(StageClearSE);
-
             }
-
         }
     }
 
@@ -62,7 +60,7 @@ public class FadeOut : MonoBehaviour
         }
         if(end)
         {
-            scene = "Title";
+            scene = "Select";
         }
         GameDirector.OpenScene(scene);
     }

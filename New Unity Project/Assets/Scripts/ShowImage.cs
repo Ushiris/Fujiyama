@@ -8,6 +8,8 @@ public class ShowImage : MonoBehaviour
     public Sprite image;
     public Image frame;
     public AudioClip getSE;
+    public int id;
+
     bool isFade = false;
     float timer = 0;
     AudioSource Audio;
@@ -44,7 +46,7 @@ public class ShowImage : MonoBehaviour
             frame.color = new Color(1f,1f,1f,0f);
             isFade = true;
             Audio = gameObject.AddComponent<AudioSource>();
-            other.GetComponent<PlayerController>().GetMemoryFragment();
+            other.GetComponent<PlayerController>().GetMemoryFragment(id);
             Audio.PlayOneShot(getSE);
         }
     }
