@@ -1283,7 +1283,7 @@ MonoBehaviour:
   - {fileID: 2606855247690747053, guid: d87e525f0d654534e9a22c92f4ca29b5, type: 3}
   - {fileID: 2606855247690747053, guid: 0a15e5cac84f91b4b818616bba00396d, type: 3}
   stageB: 0
-  stageBmat: []
+  stageBobj: []
 --- !u!4 &353786947 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 0a15e5cac84f91b4b818616bba00396d,
@@ -2882,6 +2882,11 @@ PrefabInstance:
       propertyPath: frame
       value: 
       objectReference: {fileID: 629558477}
+    - target: {fileID: -1444900708720811735, guid: 70b14e9abb0289441b09b31ad9d9899e,
+        type: 3}
+      propertyPath: id
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 70b14e9abb0289441b09b31ad9d9899e, type: 3}
 --- !u!1001 &730136802
@@ -5492,6 +5497,11 @@ PrefabInstance:
       propertyPath: frame
       value: 
       objectReference: {fileID: 629558477}
+    - target: {fileID: -1444900708720811735, guid: 70b14e9abb0289441b09b31ad9d9899e,
+        type: 3}
+      propertyPath: id
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 70b14e9abb0289441b09b31ad9d9899e, type: 3}
 --- !u!1 &1426327114
@@ -5510,7 +5520,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!82 &1426327115
 AudioSource:
   m_ObjectHideFlags: 0

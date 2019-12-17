@@ -9,7 +9,9 @@ public class GameDirector : MonoBehaviour
     static PlayDataDirector PlayData;
     static bool AStageClear = false;
     static bool BStageClear = false;
-    static List<bool> MemoryFragmentFlag=new List<bool>(6);
+    public static bool isCleared = true;
+    static int MemoryCount = 0;
+    static List<int> MemoryList = new List<int>();
 
     private void Start()
     {
@@ -31,7 +33,7 @@ public class GameDirector : MonoBehaviour
                 break;
         }
 
-        if(AStageClear&&BStageClear)
+        if (AStageClear && BStageClear)
         {
             //PlayData.PlayEnd();
             return true;
@@ -39,14 +41,16 @@ public class GameDirector : MonoBehaviour
         return false;
     }
 
+    public static bool IsEndGame()
+    {
+        return AStageClear && BStageClear;
+    }
+
     public static bool IsClearGame()
     {
-        foreach(var fg in MemoryFragmentFlag)
+        if (MemoryCount != 6)
         {
-            if(!fg)
-            {
-                return false;
-            }
+            return false;
         }
 
         return true;
@@ -54,15 +58,24 @@ public class GameDirector : MonoBehaviour
 
     public static void Remind(int id)
     {
-        MemoryFragmentFlag[id] = true;
+        foreach (var vs in MemoryList)
+        {
+            if (id == vs)
+            {
+                return;
+            }
+        }
+
+        MemoryList.Add(id);
+        MemoryCount++;
     }
 
     static void FlagReset()
     {
         AStageClear = false;
         BStageClear = false;
-        MemoryFragmentFlag.Clear();
-        MemoryFragmentFlag = new List<bool>(6);
+        MemoryCount = 0;
+        MemoryList.Clear();
     }
 
     public void OnClickOpenScene(string SceneName)
@@ -71,8 +84,13 @@ public class GameDirector : MonoBehaviour
     }
     public static void OpenScene(string SceneName)
     {
-        if(SceneName=="Title")
+        if (SceneName == "Title")
         {
+            if (!IsClearGame())
+            {
+                isCleared = false;
+            }
+
             FlagReset();
         }
         SceneManager.LoadScene(SceneName);

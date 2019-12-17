@@ -37,5 +37,6 @@ public class Remind : MonoBehaviour
         Vector3 temp = Main.transform.position;
         Main.transform.position = stageBobj[count].transform.position;
         stageBobj[count].transform.position = temp;
+        Main = stageBobj[count];
     }
 }

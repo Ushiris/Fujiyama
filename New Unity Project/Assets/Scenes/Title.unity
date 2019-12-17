@@ -515,7 +515,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: 275, y: 0}
-  m_SizeDelta: {x: 520, y: 518}
+  m_SizeDelta: {x: 520, y: 520}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &853666217
 MonoBehaviour:
@@ -529,7 +529,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6845c5cc963899a4ca76e535c3e65951, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: -0.1
+  speed: -0.07
 --- !u!114 &853666218
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -982,6 +982,7 @@ GameObject:
   - component: {fileID: 1409441769}
   - component: {fileID: 1409441768}
   - component: {fileID: 1409441770}
+  - component: {fileID: 1409441771}
   m_Layer: 5
   m_Name: girl
   m_TagString: Untagged
@@ -1057,7 +1058,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6845c5cc963899a4ca76e535c3e65951, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0.1
+  speed: 0.07
+--- !u!114 &1409441771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1409441766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f8c0814a91074a4d8c554666af188f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1640112569
 GameObject:
   m_ObjectHideFlags: 0
@@ -1177,7 +1190,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: -275, y: 0}
-  m_SizeDelta: {x: 534, y: 533}
+  m_SizeDelta: {x: 534, y: 534}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1870375286
 MonoBehaviour:
@@ -1191,7 +1204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6845c5cc963899a4ca76e535c3e65951, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: -0.1
+  speed: -0.07
 --- !u!114 &1870375287
 MonoBehaviour:
   m_ObjectHideFlags: 0
