@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour
     //定数
     private const KeyCode ExitKey = KeyCode.Escape;
     private const KeyCode DebugKey = KeyCode.B;
+    private const float FRY_VELOCITY_Y = 0.3f;
 
     //動作のパラメータ
     public float speed;
@@ -156,10 +157,10 @@ public class PlayerController : MonoBehaviour
         if (IsJumping)
         {
             JumpTimer -= Time.deltaTime;
-            if (JumpTimer <= 0f && Mathf.Abs(rb.velocity.y) < 0.2f)
+            if (JumpTimer <= 0f && Mathf.Abs(rb.velocity.y) < FRY_VELOCITY_Y)
             {
                 IsJumping = false;
-                Invoke("JumpOK", 0.2f);
+                Invoke("JumpOK", FRY_VELOCITY_Y);
                 JumpTimer = JumpCoolTime;
             }
         }
@@ -204,7 +205,7 @@ public class PlayerController : MonoBehaviour
             float z = Mathf.Abs(rb.velocity.z * 4 / 5f) < 0.05f ? (0.0f) : (rb.velocity.z * 4 / 5f);
             rb.velocity = new Vector3(x, rb.velocity.y, z);
         }
-        else if (!IsJumping && rb.velocity.y < 0.2f)
+        else if (!IsJumping && rb.velocity.y < FRY_VELOCITY_Y)
         {
             FootAudioTimer -= Time.deltaTime;
             if (FootAudioTimer < 0)
@@ -325,8 +326,8 @@ public class PlayerController : MonoBehaviour
 
         bool[] state =
             {
-            Std.CheckKeyList(right)||Input.GetAxis("PS4LR")>0.7f,
-            Std.CheckKeyList(left)||Input.GetAxis("PS4LR")<-0.7f,
+            Std.CheckKeyList(right)||Input.GetAxis("PS4LR")>0.7f||Input.GetAxis("PS4LR_s")>0.7f,
+            Std.CheckKeyList(left)||Input.GetAxis("PS4LR")<-0.7f||Input.GetAxis("PS4LR_s")<-0.7f,
             Std.CheckKeyList(jump),
             Std.CheckKeyList(action),
             Std.CheckKeyList(exit),
@@ -375,13 +376,13 @@ public class PlayerController : MonoBehaviour
     //地面との接触、離脱時に呼ぶ関数。IsGround=hitGになります。
     public void Ground(bool hitG)
     {
-        IsGround = Mathf.Abs(rb.velocity.y) < 0.2f && hitG;
+        IsGround = Mathf.Abs(rb.velocity.y) < FRY_VELOCITY_Y && hitG;
     }
 
     //ジャンプできるかどうかを調べます。
     public bool IsCanJamp()
     {
-        return !(IsLadder || !IsGround || IsGondra || IsJumping || !AcceptJump || Mathf.Abs(rb.velocity.y) > 0.2f);
+        return !(IsLadder || !IsGround || IsGondra || IsJumping || !AcceptJump || Mathf.Abs(rb.velocity.y) > FRY_VELOCITY_Y);
     }
 
     //動くことが可能かどうかを判断します。
@@ -426,7 +427,7 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log(transform.forward.x * 1000);
         rb.AddForce(new Vector3(0, 200, 0));
-        Invoke("push", 0.2f);
+        Invoke("push", FRY_VELOCITY_Y);
         LadderEnd();
     }
 
@@ -462,12 +463,12 @@ public class PlayerController : MonoBehaviour
     //アニメーションへ状態を送信するメソッド。
     public void SetAnimStates(bool reset = false)
     {
-        anim.SetBool("isRunning", LRmoved && !IsLadder && !IsJumping&& Mathf.Abs(rb.velocity.y) < 0.2f && !reset);
+        anim.SetBool("isRunning", LRmoved && !IsLadder && !IsJumping&& Mathf.Abs(rb.velocity.y) < FRY_VELOCITY_Y && !reset);
         anim.SetBool("isJumping", IsJumping && !IsGround && !IsLadder && !reset);
-        anim.SetBool("isUp", rb.velocity.y > 0.2f && IsJumping && !reset);
+        anim.SetBool("isUp", rb.velocity.y > FRY_VELOCITY_Y && IsJumping && !reset);
         anim.SetBool("isLadder", IsLadder && !reset);
         anim.SetBool("Gondra", IsGondra && !reset);
-        anim.SetBool("IsFall", rb.velocity.y < -0.2f && !reset);
+        anim.SetBool("IsFall", rb.velocity.y < -FRY_VELOCITY_Y && !reset);
         anim.SetBool("isLadderDown", isLadderDown && !reset);
     }
 
