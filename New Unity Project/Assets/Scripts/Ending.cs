@@ -8,6 +8,7 @@ public class Ending : MonoBehaviour
     public PlayerController player;
     public Vector3 DeskPos;
     public Vector3 DoorPos;
+
     public float AnimDuration;
     public Image panel;
     public SpriteRenderer door_open;
@@ -21,15 +22,16 @@ public class Ending : MonoBehaviour
     {
         if (GameDirector.IsEndGame())
         {
-            isActive = true;
-            player.SetGoWalkMode(DeskPos, AnimDuration);
-            fade = gameObject.AddComponent<SimpleFade>();
-            fade.Setting(AnimDuration, panel, GameDirector.IsClearGame());
-            fade.set(true);
+            player.Bind();
+            player.Look(DeskPos);
+            Invoke("Setup", 0.5f);
 
             if (GameDirector.IsClearGame())
             {
+                Invoke("OpenDoor",1.5f);
                 Invoke("Turn", 2.0f);
+                Invoke("FadeStart", 3.0f);
+                Invoke("EndGame", 5.0f);
             }
             else
             {
@@ -39,11 +41,36 @@ public class Ending : MonoBehaviour
         }
     }
 
+    void Setup()
+    {
+        isActive = true;
+        player.SetGoWalkMode(DeskPos, AnimDuration);
+        fade = gameObject.AddComponent<SimpleFade>();
+        fade.Setting(2.0f, panel, GameDirector.IsClearGame());
+        fade.set(false);
+    }
+
+    void Stop()
+    {
+        player.CancelMovie();
+        player.Bind();
+    }
+
+    void OpenDoor()
+    {
+        door_open.color = Color.white;
+    }
+
+    void FadeStart()
+    {
+        fade.set(true);
+    }
+
     void Turn()
     {
-        player.SetGoWalkMode(DoorPos, AnimDuration);
+        player.Look(DoorPos);
+        Stop();
         door_open.color = Color.white;
-        Invoke("EndGame",0.5f);
     }
 
     void EndGame()

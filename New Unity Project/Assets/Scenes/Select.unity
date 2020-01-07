@@ -1059,9 +1059,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 512550165}
-  DeskPos: {x: 16, y: -8, z: 7}
-  DoorPos: {x: -15, y: -5, z: 7}
-  AnimDuration: 6
+  DeskPos: {x: 16, y: -3.68, z: 3}
+  DoorPos: {x: -15, y: -3.68, z: 3}
+  AnimDuration: 5
   panel: {fileID: 954251596}
   door_open: {fileID: 348198605}
   dark_room: {fileID: 579004876}

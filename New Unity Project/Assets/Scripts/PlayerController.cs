@@ -425,7 +425,6 @@ public class PlayerController : MonoBehaviour
 
     public void LadderExit()
     {
-        Debug.Log(transform.forward.x * 1000);
         rb.AddForce(new Vector3(0, 200, 0));
         Invoke("push", FRY_VELOCITY_Y);
         LadderEnd();
@@ -492,6 +491,11 @@ public class PlayerController : MonoBehaviour
         IsMovieMode = true;
         MovieTimer = duration;
         MovieDuration = duration;
+    }
+
+    public void CancelMovie()
+    {
+        IsMovieMode = false;
     }
 
     public void GoWalk(float progles)
