@@ -10,7 +10,7 @@ public class GameDirector : MonoBehaviour
     static bool AStageClear = false;
     static bool BStageClear = false;
     public static bool isCleared = true;
-    static int MemoryCount = 0;
+    public static int MemoryCount = 0;
     static List<int> MemoryList = new List<int>();
 
     private void Start()
