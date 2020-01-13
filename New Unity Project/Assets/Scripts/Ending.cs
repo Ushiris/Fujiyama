@@ -28,15 +28,15 @@ public class Ending : MonoBehaviour
 
             if (GameDirector.IsClearGame())
             {
-                Invoke("OpenDoor",1.5f);
-                Invoke("Turn", 2.0f);
-                Invoke("FadeStart", 3.0f);
-                Invoke("EndGame", 5.0f);
+                Invoke("OpenDoor",2f);
+                Invoke("Turn", 3.5f);
+                Invoke("FadeStart", 4.5f);
+                Invoke("EndGame", 6.5f);
             }
             else
             {
                 dark_room.color = Color.white;
-                Invoke("EndGame", 2.0f);
+                Invoke("EndGame", 3.0f);
             }
         }
     }
