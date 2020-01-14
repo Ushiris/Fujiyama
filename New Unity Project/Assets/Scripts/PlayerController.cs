@@ -183,6 +183,13 @@ public class PlayerController : MonoBehaviour
             Move(PlayerInput[(int)Commands.right] ? LR.right : LR.left);
             LRmoved = true;
         }
+        
+        //他スクリプトで指定されたアクションを発生させる
+        if (PlayerInput[(int)Commands.action])
+        {
+            EventEffect();
+            PlayerInput[(int)Commands.jump] = false;
+        }
 
         //ジャンプする
         if (PlayerInput[(int)Commands.jump])
@@ -190,12 +197,6 @@ public class PlayerController : MonoBehaviour
             IsJumping = true;
             AcceptJump = false;
             Jump();
-        }
-
-        //他スクリプトで指定されたアクションを発生させる
-        if (PlayerInput[(int)Commands.action])
-        {
-            EventEffect();
         }
 
         //左右の入力なしなら、左右の速度を減衰させる
