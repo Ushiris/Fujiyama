@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Commands_
+public enum Commands
 {
     right,
     left,

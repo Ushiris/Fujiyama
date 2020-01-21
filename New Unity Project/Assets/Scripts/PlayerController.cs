@@ -10,19 +10,6 @@ public enum LR
     left
 }
 
-//入力のリスト
-public enum Commands
-{
-    right,
-    left,
-    jump,
-    action,
-    exit,
-    debug,
-    d_respawn,
-    END,
-}
-
 public class PlayerController : MonoBehaviour
 {
     #region variables
@@ -40,6 +27,7 @@ public class PlayerController : MonoBehaviour
     public AudioClip walkSE;
     bool isLeftBind = false;
     bool isRightBind = false;
+    bool LRmoved = false;
 
     //ジャンプ
     bool AcceptJump { get; set; }
@@ -71,16 +59,13 @@ public class PlayerController : MonoBehaviour
 
     //ゴンドラ
     public bool IsGondra = false;
+    public bool IsGondraGetOut = false;
 
     //梯子関係
     bool IsLadder = false;
     
     //行動制御
     bool IsPause { get; set; }
-
-    //アニメーション制御
-    public bool IsGondraGetOut = false;
-    bool LRmoved = false;
 
     //コンポーネント置き場
     public Rigidbody rb;
@@ -353,6 +338,7 @@ public class PlayerController : MonoBehaviour
         IsMovieMode = true;
         MovieTimer = 100;
         IsNotWalkMovie = true;
+        LRmoved = false;
     }
 
     //ゴンドラ下車時の処理。要するに原状復帰。
