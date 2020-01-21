@@ -50,13 +50,7 @@ public class PlayerController : MonoBehaviour
     public Remind MainObj;
 
     //入力の設定
-    public List<KeyCode> right = new List<KeyCode> { KeyCode.D, KeyCode.RightArrow };
-    public List<KeyCode> left = new List<KeyCode> { KeyCode.A, KeyCode.LeftArrow };
-    public List<KeyCode> jump = new List<KeyCode> { KeyCode.Space };
-    public List<KeyCode> action = new List<KeyCode> { KeyCode.W };
-    public List<KeyCode> exit = new List<KeyCode> { KeyCode.Escape };
-    readonly List<KeyCode> debug = new List<KeyCode> { KeyCode.B };
-    readonly List<KeyCode> d_respawn = new List<KeyCode> { KeyCode.R };
+    InputManager pl_in;
     bool[] PlayerInput = { false, };
 
     //キャラクターのステート
@@ -325,16 +319,7 @@ public class PlayerController : MonoBehaviour
         }
 
 
-        bool[] state =
-            {
-            Std.CheckKeyList(right)||Input.GetAxis("PS4LR")>0.7f||Input.GetAxis("PS4LR_s")>0.7f,
-            Std.CheckKeyList(left)||Input.GetAxis("PS4LR")<-0.7f||Input.GetAxis("PS4LR_s")<-0.7f,
-            Std.CheckKeyList(jump),
-            Std.CheckKeyList(action),
-            Std.CheckKeyList(exit),
-            Std.CheckKeyList(debug),
-            Std.CheckKeyList(d_respawn)
-        };
+        bool[] state = pl_in.GetPlayerInputs();
 
         if (!IsMovable())
         {

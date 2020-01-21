@@ -1546,6 +1546,47 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerCharactor 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6232414579549544932, guid: d8f2909231ed46b4496579f9ef25c411,
+        type: 3}
+      propertyPath: from
+      value: 
+      objectReference: {fileID: 1879731795}
+    - target: {fileID: 6232414579549544932, guid: d8f2909231ed46b4496579f9ef25c411,
+        type: 3}
+      propertyPath: to
+      value: 
+      objectReference: {fileID: 1619187516}
+    - target: {fileID: 6232414579549544932, guid: d8f2909231ed46b4496579f9ef25c411,
+        type: 3}
+      propertyPath: anim
+      value: 
+      objectReference: {fileID: 1689093550}
+    - target: {fileID: 6232414579549544932, guid: d8f2909231ed46b4496579f9ef25c411,
+        type: 3}
+      propertyPath: JumpFouce
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6232414579549544932, guid: d8f2909231ed46b4496579f9ef25c411,
+        type: 3}
+      propertyPath: speed
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 6232414579549544932, guid: d8f2909231ed46b4496579f9ef25c411,
+        type: 3}
+      propertyPath: looking
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6232414579549544932, guid: d8f2909231ed46b4496579f9ef25c411,
+        type: 3}
+      propertyPath: actImage
+      value: 
+      objectReference: {fileID: 123584591}
+    - target: {fileID: 6232414579549544932, guid: d8f2909231ed46b4496579f9ef25c411,
+        type: 3}
+      propertyPath: actUI
+      value: 
+      objectReference: {fileID: 5306210427349951732, guid: caa722b3105e7fb4981036b1bb8ec4e0,
+        type: 3}
     - target: {fileID: 6232414579549544939, guid: d8f2909231ed46b4496579f9ef25c411,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1616,47 +1657,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 4
       objectReference: {fileID: 0}
-    - target: {fileID: 6232414579549544932, guid: d8f2909231ed46b4496579f9ef25c411,
-        type: 3}
-      propertyPath: from
-      value: 
-      objectReference: {fileID: 1879731795}
-    - target: {fileID: 6232414579549544932, guid: d8f2909231ed46b4496579f9ef25c411,
-        type: 3}
-      propertyPath: to
-      value: 
-      objectReference: {fileID: 1619187516}
-    - target: {fileID: 6232414579549544932, guid: d8f2909231ed46b4496579f9ef25c411,
-        type: 3}
-      propertyPath: anim
-      value: 
-      objectReference: {fileID: 1689093550}
-    - target: {fileID: 6232414579549544932, guid: d8f2909231ed46b4496579f9ef25c411,
-        type: 3}
-      propertyPath: JumpFouce
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6232414579549544932, guid: d8f2909231ed46b4496579f9ef25c411,
-        type: 3}
-      propertyPath: speed
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 6232414579549544932, guid: d8f2909231ed46b4496579f9ef25c411,
-        type: 3}
-      propertyPath: looking
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6232414579549544932, guid: d8f2909231ed46b4496579f9ef25c411,
-        type: 3}
-      propertyPath: actImage
-      value: 
-      objectReference: {fileID: 123584591}
-    - target: {fileID: 6232414579549544932, guid: d8f2909231ed46b4496579f9ef25c411,
-        type: 3}
-      propertyPath: actUI
-      value: 
-      objectReference: {fileID: 5306210427349951732, guid: caa722b3105e7fb4981036b1bb8ec4e0,
-        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d8f2909231ed46b4496579f9ef25c411, type: 3}
 --- !u!95 &1689093550 stripped
