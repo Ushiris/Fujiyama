@@ -18,8 +18,8 @@ public class InputManager : MonoBehaviour
     //キーコンフィグのデフォルト
     readonly List<KeyCode> right = new List<KeyCode> { KeyCode.D, KeyCode.RightArrow };
     readonly List<KeyCode> left = new List<KeyCode> { KeyCode.A, KeyCode.LeftArrow };
-    readonly List<KeyCode> jump = new List<KeyCode> { KeyCode.Space,KeyCode.Joystick1Button0 };
-    readonly List<KeyCode> action = new List<KeyCode> { KeyCode.W, KeyCode.Joystick1Button1 };
+    readonly List<KeyCode> jump = new List<KeyCode> { KeyCode.Space,KeyCode.Joystick1Button1 };
+    readonly List<KeyCode> action = new List<KeyCode> { KeyCode.W, KeyCode.Joystick1Button2 };
     readonly List<KeyCode> exit = new List<KeyCode> { KeyCode.Escape };
 
     //デバッグ用のコマンド

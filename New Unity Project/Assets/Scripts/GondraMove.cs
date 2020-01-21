@@ -38,7 +38,7 @@ public class GondraMove : MonoBehaviour
     {
         if (isActive)
         {
-            progress += RideTime * Time.deltaTime / RideTime;
+            progress += Time.deltaTime / RideTime;
             Vector3 next = isCircle ? Vector3.Slerp(from, target, progress) : Vector3.Lerp(from, target, progress);
             transform.position = next;
 

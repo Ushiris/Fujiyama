@@ -5285,6 +5285,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: dummy
       objectReference: {fileID: 0}
+    - target: {fileID: 4618712639559228780, guid: 0b43656526d997749ba3d1eb60d2f2a5,
+        type: 3}
+      propertyPath: m_Name
+      value: endpos
+      objectReference: {fileID: 0}
     - target: {fileID: 8074405431114939833, guid: 0b43656526d997749ba3d1eb60d2f2a5,
         type: 3}
       propertyPath: Prev
@@ -5374,11 +5379,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 90
-      objectReference: {fileID: 0}
-    - target: {fileID: 4618712639559228780, guid: 0b43656526d997749ba3d1eb60d2f2a5,
-        type: 3}
-      propertyPath: m_Name
-      value: endpos
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0b43656526d997749ba3d1eb60d2f2a5, type: 3}
@@ -7550,7 +7550,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   to: {x: 4, y: 8.5, z: 4}
-  speed: 1
+  RideTime: 3
   isCircle: 0
   center: {x: 0, y: 0, z: 0}
   RotateAxis: {x: 0, y: 1, z: 0}
@@ -8104,6 +8104,11 @@ PrefabInstance:
         type: 3}
       propertyPath: isRing
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4762372561646303742, guid: c0f81552e9eec8a4faed269e591f7a36,
+        type: 3}
+      propertyPath: RideTime
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c0f81552e9eec8a4faed269e591f7a36, type: 3}
