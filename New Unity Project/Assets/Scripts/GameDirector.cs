@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class GameDirector : MonoBehaviour
 {
-    static PlayDataDirector PlayData;
     static bool AStageClear = false;
     static bool BStageClear = false;
     public static bool isCleared = true;

@@ -7,9 +7,6 @@ using UnityEngine;
 public class GroundChecker : MonoBehaviour
 {
     PlayerController player;
-    float timer = 0f;
-    bool flag = false;
-    bool hitG = false;
     
     void Start()
     {

@@ -169,29 +169,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70367271a24da9948b39de9caea32933, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0.06
-  JumpFouce: 300
-  JumpCoolTime: 0.8
   looking: 0
   from: {fileID: 0}
   to: {fileID: 0}
   SavePoint: {fileID: 0}
-  anim: {fileID: 0}
-  jumpSE: {fileID: 8300000, guid: d9827eadfb9eb654189c80cad8bb4e9b, type: 3}
-  walkSE: {fileID: 8300000, guid: bbd3e266dd0057543b845d69e25367bc, type: 3}
+  speed: 0.06
   footTiming: 0.35
+  walkSE: {fileID: 8300000, guid: bbd3e266dd0057543b845d69e25367bc, type: 3}
+  JumpFouce: 300
+  JumpCoolTime: 0.8
+  jumpSE: {fileID: 8300000, guid: d9827eadfb9eb654189c80cad8bb4e9b, type: 3}
+  IsNotWalkMovie: 0
+  isActionable: 0
   actImage: {fileID: 0}
   actUI: {fileID: 5306210427349951732, guid: caa722b3105e7fb4981036b1bb8ec4e0, type: 3}
-  MainObj: {fileID: 0}
-  right: 1301000064000000
-  left: 1401000061000000
-  jump: 200000004b010000
-  action: 770000004c010000
-  exit: 1b000000
-  isActionable: 0
   IsGondra: 0
   IsGondraGetOut: 0
-  IsNotWalkMovie: 0
+  rb: {fileID: 0}
+  MainObj: {fileID: 0}
+  anim: {fileID: 0}
 --- !u!136 &3835934277565399664
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -366,6 +362,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6232414579549544939}
     m_Modifications:
+    - target: {fileID: -927199367670048503, guid: ae57603e3c79b9b41ba3e4ca46d19802,
+        type: 3}
+      propertyPath: m_Name
+      value: chara_model
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: ae57603e3c79b9b41ba3e4ca46d19802,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -435,11 +436,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: ae57603e3c79b9b41ba3e4ca46d19802,
-        type: 3}
-      propertyPath: m_Name
-      value: chara_model
       objectReference: {fileID: 0}
     - target: {fileID: -6057140222963153312, guid: ae57603e3c79b9b41ba3e4ca46d19802,
         type: 3}

@@ -7,12 +7,6 @@ public class RotateObj : MonoBehaviour
     public bool isActive = false;
     public float speed = 0f;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     // Update is called once per frame
     void Update()
     {

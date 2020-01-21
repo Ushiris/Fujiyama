@@ -5,11 +5,7 @@ using UnityEngine.UI;
 
 public class RotateImage : MonoBehaviour
 {
-    public float speed = 0;
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
+    public float speed = 0.1f;
 
     // Update is called once per frame
     void Update()

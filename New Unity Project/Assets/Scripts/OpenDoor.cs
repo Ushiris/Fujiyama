@@ -5,18 +5,20 @@ using UnityEngine.UI;
 
 public class OpenDoor : MonoBehaviour
 {
+    //基本的なパラメータ
     public GameObject sprite;
     public float Duration = 2f;
     public float MoveScale = 10f;
     public string NextScene = "Title";
     public Canvas canvas;
     public bool isWhiteOut;
+    public AudioClip openSE;
 
+    //アニメーションする必要がある場合への対応
     public bool IsAnimation = false;
     public List<Sprite> images;
     public List<float> timing;
 
-    public AudioClip openSE;
 
     Image image;
     PlayerController pl;
@@ -25,6 +27,7 @@ public class OpenDoor : MonoBehaviour
 
     private void Start()
     {
+        //（アニメーション有りなら）ドア開放アニメーションのセットアップ
         if(IsAnimation)
         {
             foreach (var item in timing)
@@ -38,11 +41,12 @@ public class OpenDoor : MonoBehaviour
         fade.scene = NextScene;
         fade.isAlone = false;
         fade.isWhite = isWhiteOut;
-
     }
 
+    
     private void OnTriggerEnter(Collider other)
     {
+        //プレイヤーにアクションを与える
         if (other.tag == "Player")
         {
             sprite.GetComponent<SpriteRenderer>().color = Color.white;
@@ -54,6 +58,7 @@ public class OpenDoor : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+        //プレイヤーがアクションを起こせなくする
         if (other.tag == "Player")
         {
             sprite.GetComponent<SpriteRenderer>().color = Color.clear;
@@ -61,6 +66,7 @@ public class OpenDoor : MonoBehaviour
         }
     }
 
+    //プレイヤーが行うアクション。ムービーモードへ移行し、フェードアウトする。
     public void Action()
     {
         if (canvas == null)
@@ -81,6 +87,7 @@ public class OpenDoor : MonoBehaviour
 
         gameObject.AddComponent<AudioSource>().PlayOneShot(openSE);
 
+        //アニメーションが存在する場合の処理
         if(IsAnimation)
         {
             for(int i=0;i<images.Count;i++)

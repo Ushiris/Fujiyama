@@ -26,65 +26,67 @@ public enum Commands
 public class PlayerController : MonoBehaviour
 {
     #region variables
-    //定数
+    //空中判定用の閾値
     private const float FRY_VELOCITY_Y = 0.3f;
-
-    //動作のパラメータ
-    public float speed;
-    public float JumpFouce;
-    public float JumpCoolTime = 0.8f;
-
-    //初期設定が必要な変数
+    
+    //歩き
     public LR looking;
     public CheckPoint from;
     public CheckPoint to;
     public SaveManager SavePoint;
-    public Animator anim;
-    public AudioClip jumpSE;
-    public AudioClip walkSE;
+    public float speed;
     public float footTiming = 0.5f;
+    float FootAudioTimer = 0;
+    public AudioClip walkSE;
+    bool isLeftBind = false;
+    bool isRightBind = false;
+
+    //ジャンプ
+    bool AcceptJump { get; set; }
+    public float JumpFouce;
+    public float JumpCoolTime = 0.8f;
+    float JumpTimer = 0.8f;
+    public AudioClip jumpSE;
+    bool IsJumping = false;
+    bool IsGround = false;
+
+    //ムービーモード
+    Vector3 targetPos;
+    Vector3 startPos;
+    bool IsMovieMode = false;
+    float MovieTimer;
+    float MovieDuration;
+    public bool IsNotWalkMovie = false;
+    
+    //アクション
+    public delegate void Action();
+    public Action EventEffect;
+    public bool isActionable = false;
     public Image actImage;
     public Sprite actUI;
-    public Remind MainObj;
 
-    //入力の設定
+    //入力
     InputManager pl_in;
     bool[] PlayerInput = { false, };
 
-    //キャラクターのステート
-    public bool isActionable = false;
+    //ゴンドラ
     public bool IsGondra = false;
-    public bool IsGondraGetOut = false;
-    public bool IsNotWalkMovie = false;
-    bool IsGround = false;
+
+    //梯子関係
     bool IsLadder = false;
-    bool IsJumping = false;
-    bool LRmoved = false;
-    bool IsRiding = false;
+    
+    //行動制御
     bool IsPause { get; set; }
-    bool AcceptJump { get; set; }
-    bool IsMovieMode = false;
-    bool isLeftBind = false;
-    bool isRightBind = false;
-    float MovieTimer;
-    float MovieDuration;
-    float JumpTimer = 0.8f;
-    float FootAudioTimer = 0;
+
+    //アニメーション制御
+    public bool IsGondraGetOut = false;
+    bool LRmoved = false;
 
     //コンポーネント置き場
     public Rigidbody rb;
+    public Remind MainObj;
+    public Animator anim;
     AudioSource A_source;
-
-    //前フレームの入力状態の保存
-    bool[] beforeInput = { false };
-
-    //アクションボタンで続行されるアクション
-    public delegate void Action();
-    public Action EventEffect;
-
-    //ムービーカットに必要な変数
-    Vector3 targetPos;
-    Vector3 startPos;
     #endregion
     
     // Start is called before the first frame update
@@ -93,6 +95,7 @@ public class PlayerController : MonoBehaviour
         pl_in = gameObject.AddComponent<InputManager>();
         rb = gameObject.GetComponent<Rigidbody>();
         A_source = gameObject.GetComponent<AudioSource>();
+
         Look(to);
         InputCheck();
         SetAnimStates(true);
@@ -104,15 +107,9 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(isActionable&&!IsPause&&!IsMovieMode)
-        {
-            actImage.color = Color.white;
-        }
-        else
-        {
-            actImage.color = Color.clear;
-        }
-        //ムービー時に操作を受け付けない
+        actImage.color = (isActionable && !IsPause && !IsMovieMode) ? Color.white : Color.clear;
+
+        //ムービー時の挙動
         if(IsMovieMode)
         {
             MovieTimer -= Time.deltaTime;
@@ -126,6 +123,7 @@ public class PlayerController : MonoBehaviour
             {
                 GoWalk((MovieDuration- MovieTimer) / MovieDuration);
             }
+
             return;
         }
 
@@ -140,8 +138,7 @@ public class PlayerController : MonoBehaviour
                 JumpTimer = JumpCoolTime;
             }
         }
-
-
+        
         LRmoved = false;
 
         //プレイヤーからの入力を受け取る
@@ -245,18 +242,19 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //記憶のかけらを獲得した時の行動
     public void GetMemoryFragment(int id)
     {
         Invoke("Remind", 2.0f);
         IsPause = true;
         rb.velocity = Vector3.zero;
         GameDirector.Remind(id);
-        Invoke("Resume", 5.5f);
+        Invoke("Resume", 5.0f);
     }
 
     public void Remind()
     {
-        MainObj.remined();
+        MainObj.Remined();
     }
 
     private void Resume()
@@ -289,8 +287,7 @@ public class PlayerController : MonoBehaviour
             }
             return;
         }
-
-
+        
         bool[] state = pl_in.GetPlayerInputs();
 
         if (!IsMovable())
@@ -320,8 +317,7 @@ public class PlayerController : MonoBehaviour
         {
             state[(int)Commands.left] = false;
         }
-
-        beforeInput = state;
+        
         PlayerInput = state;
     }
 
@@ -368,6 +364,7 @@ public class PlayerController : MonoBehaviour
         IsNotWalkMovie = true;
     }
 
+    //梯子アニメーションの再生と終了時間の予約
     public void LadderEnter(Vector3 to,float duration)
     {
         IsLadder = transform.position.y < to.y;
@@ -381,23 +378,19 @@ public class PlayerController : MonoBehaviour
         Invoke("Resume", duration);
     }
 
+    //梯子おわりのお知らせ
     public void LadderExit()
     {
         rb.AddForce(new Vector3(0, 200, 0));
-        Invoke("push", FRY_VELOCITY_Y);
-        LadderEnd();
-    }
-
-    public void push()
-    {
-        rb.AddForce(new Vector3(transform.forward.x * 300, 0, transform.forward.z * 300));
-    }
-
-    private void LadderEnd()
-    {
+        Invoke("Push", FRY_VELOCITY_Y);
         IsLadder = false;
         rb.useGravity = true;
         SetAnimStates(true);
+    }
+
+    public void Push()
+    {
+        rb.AddForce(new Vector3(transform.forward.x * 300, 0, transform.forward.z * 300));
     }
     
     //リスポーン処理。最後に触れたSavePointの情報を用いて再誕します。
@@ -461,6 +454,7 @@ public class PlayerController : MonoBehaviour
         transform.position = Vector3.Lerp(startPos, targetPos, progles);
     }
 
+    //壁にめり込む現象の阻止。
     public void Bind()
     {
         if(looking == LR.right)
@@ -473,6 +467,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //再行動可能にする。Bindの逆関数。
     public void React()
     {
         isRightBind = false;

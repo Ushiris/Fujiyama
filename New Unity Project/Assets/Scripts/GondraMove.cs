@@ -5,7 +5,7 @@ using UnityEngine;
 public class GondraMove : MonoBehaviour
 {
     public Vector3 to = Vector3.zero;
-    public float speed = 1f;
+    public float RideTime = 3f;
     public bool isCircle;//球面線形補完に切り替えるトグルスイッチのようにお使いください
     public Vector3 center;
     public Vector3 RotateAxis = new Vector3(0, 1, 0);
@@ -38,7 +38,7 @@ public class GondraMove : MonoBehaviour
     {
         if (isActive)
         {
-            progress += speed / 100;
+            progress += RideTime * Time.deltaTime / RideTime;
             Vector3 next = isCircle ? Vector3.Slerp(from, target, progress) : Vector3.Lerp(from, target, progress);
             transform.position = next;
 
@@ -60,11 +60,11 @@ public class GondraMove : MonoBehaviour
                 player.anim.SetBool("Gondra", false);
                 if (isRing)
                 {
-                    Invoke("getOut", 2f);
+                    Invoke("GetOut", 2f);
                 }
                 else
                 {
-                    getOut();
+                    GetOut();
                 }
             }
         }
@@ -72,8 +72,10 @@ public class GondraMove : MonoBehaviour
         before = transform.position;
     }
 
+    
     private void OnCollisionEnter(Collision collision)
     {
+        //ゴンドラに乗車可能になります
         if(collision.gameObject.tag=="Player")
         {
             player = collision.gameObject.GetComponent<PlayerController>();
@@ -85,12 +87,14 @@ public class GondraMove : MonoBehaviour
 
     private void OnCollisionExit(Collision collision)
     {
+        //ゴンドラに乗れなくなります
         if(collision.gameObject.tag=="Player")
         {
             player.isActionable = false;
         }
     }
 
+    //ゴンドラに乗ります
     public void Action()
     {
         if (isActionable)
@@ -99,23 +103,25 @@ public class GondraMove : MonoBehaviour
             if (isRing)
             {
                 player.IsGondra = true;
-                Invoke("go", 2f);
+                Invoke("Go", 2f);
             }
             else
             {
-                go();
+                Go();
             }
         }
     }
 
-    void go()
+    //出発します
+    void Go()
     {
         isActive = true;
         progress = 0f;
         player.GondraEnter();
     }
 
-    void getOut()
+    //降ろします
+    void GetOut()
     {
         isActionable = true;
         isDefPos = !isDefPos;

@@ -5,12 +5,13 @@ using UnityEngine;
 public class Remind : MonoBehaviour
 {
     public GameObject Main;
-    MeshFilter mainMesh;
     public List<Mesh> mesh;
-    int count = 0;
     public bool stageB = false;
     public List<GameObject> stageBobj;
     public RotateObj rotateObj;
+    
+    int count = 0;
+    MeshFilter mainMesh;
 
     
     // Start is called before the first frame update
@@ -19,7 +20,7 @@ public class Remind : MonoBehaviour
         mainMesh = Main.GetComponent<MeshFilter>();
     }
 
-    public void remined()
+    public void Remined()
     {
         if (stageB)
         {
@@ -34,6 +35,7 @@ public class Remind : MonoBehaviour
         count++;
     }
 
+    //Bステージ版への対応
     private void BstageEvent()
     {
         Vector3 temp = Main.transform.position;

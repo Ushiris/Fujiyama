@@ -30,16 +30,20 @@ public class MainCamera : MonoBehaviour
         transform.LookAt(player.transform);
     }
     
+    //プレイヤーが動いた後に更新する
     void LateUpdate()
     {
+        //カメラがあるべき目標地点を取得し、いい感じに遅れる。
         Vector3 toNext = playerController.GetCameraPosXZ(diff);
         toNext.y += diff.y;
         Vector3 toNextDiff = Vector3.Lerp(transform.position, toNext, 1 / 60f);
         transform.position = toNextDiff;
         transform.position = new Vector3(transform.position.x, toNext.y, transform.position.z);
 
+        //いい感じに滑らか動作をさせる
         rb.velocity = playerController.rb.velocity * 0.85f;
         
+        //プレイヤーを画面の中心にとらえる
         transform.LookAt(player.transform.position);
     }
 }
