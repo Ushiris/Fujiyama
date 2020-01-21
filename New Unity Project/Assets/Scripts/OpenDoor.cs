@@ -67,11 +67,16 @@ public class OpenDoor : MonoBehaviour
         {
             canvas = gameObject.AddComponent<Canvas>();
         }
-        image = canvas.gameObject.AddComponent<Image>();
+        if (image == null)
+        {
+            image = canvas.gameObject.AddComponent<Image>();
+        }
         image.color = new Color(0, 0, 0, 0);
         fade.panel = image;
-        
-        pl.SetGoWalkMode(pl.transform.position + Vector3.forward * MoveScale, Duration + 0.5f);
+
+        pl.isActionable = false;
+        pl.Look(new Vector3(pl.transform.position.x, pl.transform.position.y, pl.transform.position.z + 1));
+        pl.Bind();
         fade.FadeStart();
 
         gameObject.AddComponent<AudioSource>().PlayOneShot(openSE);
@@ -83,6 +88,7 @@ public class OpenDoor : MonoBehaviour
                 Invoke("SwapImage", timing[i]);
             }
         }
+        Destroy(this);
     }
 
     public void SwapImage()

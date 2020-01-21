@@ -59,6 +59,7 @@ public class Ending : MonoBehaviour
     void OpenDoor()
     {
         door_open.color = Color.white;
+        player.CancelMovie();
     }
 
     void FadeStart()

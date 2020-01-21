@@ -10,6 +10,7 @@ public class Remind : MonoBehaviour
     int count = 0;
     public bool stageB = false;
     public List<GameObject> stageBobj;
+    public RotateObj rotateObj;
 
     
     // Start is called before the first frame update
@@ -27,6 +28,7 @@ public class Remind : MonoBehaviour
         else
         {
             mainMesh.mesh = mesh[count];
+            rotateObj.isActive = true;
         }
 
         count++;
