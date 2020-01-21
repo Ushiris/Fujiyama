@@ -27,8 +27,6 @@ public class PlayerController : MonoBehaviour
 {
     #region variables
     //定数
-    private const KeyCode ExitKey = KeyCode.Escape;
-    private const KeyCode DebugKey = KeyCode.B;
     private const float FRY_VELOCITY_Y = 0.3f;
 
     //動作のパラメータ
@@ -66,7 +64,6 @@ public class PlayerController : MonoBehaviour
     bool IsPause { get; set; }
     bool AcceptJump { get; set; }
     bool IsMovieMode = false;
-    bool isLadderDown = false;
     bool isLeftBind = false;
     bool isRightBind = false;
     float MovieTimer;
@@ -75,11 +72,8 @@ public class PlayerController : MonoBehaviour
     float FootAudioTimer = 0;
 
     //コンポーネント置き場
-    Rigidbody rb;
+    public Rigidbody rb;
     AudioSource A_source;
-
-    //変数の初期値
-    float DefaultSpeed;
 
     //前フレームの入力状態の保存
     bool[] beforeInput = { false };
@@ -91,27 +85,15 @@ public class PlayerController : MonoBehaviour
     //ムービーカットに必要な変数
     Vector3 targetPos;
     Vector3 startPos;
-
-    //debug
-    Vector3 def_p;
-    Quaternion def_q;
-    CheckPoint def_f_CP;
-    CheckPoint def_t_CP;
-    LR def_l;
     #endregion
     
     // Start is called before the first frame update
     void Start()
     {
-        DefaultSpeed = speed;
+        pl_in = gameObject.AddComponent<InputManager>();
         rb = gameObject.GetComponent<Rigidbody>();
         A_source = gameObject.GetComponent<AudioSource>();
         Look(to);
-        def_p = transform.position;
-        def_q = transform.rotation;
-        def_f_CP = from;
-        def_t_CP = to;
-        def_l = looking;
         InputCheck();
         SetAnimStates(true);
         AcceptJump = true;
@@ -215,16 +197,6 @@ public class PlayerController : MonoBehaviour
 
         //アニメーションにプレイヤーの状態を送信
         SetAnimStates();
-
-        //debug code
-        if (Input.GetKeyDown(DebugKey))
-        {
-            DebugReset();
-        }
-        if (PlayerInput[(int)Commands.d_respawn])
-        {
-            Respawn();
-        }
     }
 
     //プレイヤーキャラクターをInputLRに動かします。
@@ -454,7 +426,6 @@ public class PlayerController : MonoBehaviour
         anim.SetBool("isLadder", IsLadder && !reset);
         anim.SetBool("Gondra", IsGondra && !reset);
         anim.SetBool("IsFall", rb.velocity.y < -FRY_VELOCITY_Y && !reset);
-        anim.SetBool("isLadderDown", isLadderDown && !reset);
     }
 
     //跳びます。
@@ -506,14 +477,5 @@ public class PlayerController : MonoBehaviour
     {
         isRightBind = false;
         isLeftBind = false;
-    }
-
-    //debug code
-    private void DebugReset()
-    {
-        transform.SetPositionAndRotation(def_p, def_q);
-        from = def_f_CP;
-        to = def_t_CP;
-        looking = def_l;
     }
 }
